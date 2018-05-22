@@ -72,9 +72,10 @@ public class Agent {
     int i,j;
     int initialed = 0;
     int startCol = viewedMap.length/2;
-    int startVol = viewedMap.length/2;
+    int startRow = viewedMap.length/2;
     ViewedMap updateView = new ViewedMap();
-
+    System.out.println(startCol);
+    System.out.println(startRow);
     if( args.length < 2 ) {
       System.out.println("Usage: java Agent -p <port>\n");
       System.exit(-1);

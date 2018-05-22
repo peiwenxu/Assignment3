@@ -22,7 +22,7 @@ public class ViewedMap {
 	
 	public void initialMap(char inView[][], char currentView[][]) {
 		int midRow = currentView.length/2;
-		int midCol = currentView[0].length/2;
+		int midCol = (currentView.length)/2;
 		int startRow = midRow-2;
 		int startCol = midCol-2;
 		for(int i = 0; i < 5; i++) {
@@ -33,6 +33,7 @@ public class ViewedMap {
 					currentView[startRow][startCol++] = inView[i][i2];
 				}
 			}
+			startCol = midCol-2;
 			startRow++;
 		}
 	}
@@ -48,8 +49,30 @@ public class ViewedMap {
 		}
 	}
 	
-	public void updateView(char dire, char action,char viewedMap[][]) {
-		
+	public void updateView(char dire, char action,char viewedMap[][], int currentRow, int currentCol) {
+		if(action == 'R' || action == 'l') {
+			if(viewedMap[currentRow][currentCol] == '^') {
+				viewedMap[currentRow][currentCol] = '>';
+			} else if(viewedMap[currentRow][currentCol] == '>') {
+				viewedMap[currentRow][currentCol] = 'v';
+			} else if(viewedMap[currentRow][currentCol] == 'v') {
+				viewedMap[currentRow][currentCol] = '<';
+			} else if(viewedMap[currentRow][currentCol] == '<') {
+				viewedMap[currentRow][currentCol] = '^';
+			}
+			return;
+		} else if(action == 'L' || action == 'l') {
+			if(viewedMap[currentRow][currentCol] == '^') {
+				viewedMap[currentRow][currentCol] = '<';
+			} else if(viewedMap[currentRow][currentCol] == '>') {
+				viewedMap[currentRow][currentCol] = '^';
+			} else if(viewedMap[currentRow][currentCol] == 'v') {
+				viewedMap[currentRow][currentCol] = '>';
+			} else if(viewedMap[currentRow][currentCol] == '<') {
+				viewedMap[currentRow][currentCol] = 'v';
+			}
+			return;
+		}
 	}
 	
 //	public char getAction(char action) {
