@@ -80,8 +80,35 @@ public class ViewedMap {
 			if(dire == NORTH) {
 				int startRow = currentRow-2;
 				int startCol = currentCol-2;
+				viewedMap[currentRow+1][currentCol] = ' ';
+				viewedMap[currentRow][currentCol] = '^';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol++] = inView[0][i];
+					
+				}
+			} else if (dire == SOUTH) {
+				int startRow = currentRow+2;
+				int startCol = currentCol+2;
+				viewedMap[currentRow-1][currentCol] = ' ';
+				viewedMap[currentRow][currentCol] = 'v';
+				for(int i = 0; i < 5; i++) {
+					viewedMap[startRow][startCol--] = inView[0][i];
+				}
+			} else if(dire == EAST) {
+				int startRow = currentRow-2;
+				int startCol = currentCol+2;
+				viewedMap[currentRow][currentCol-1] = ' ';
+				viewedMap[currentRow][currentCol] = 'v';
+				for(int i = 0; i < 5; i++) {
+					viewedMap[startRow++][startCol] = inView[0][i];
+				}
+			} else if(dire == WEST) {
+				int startRow = currentRow+2;
+				int startCol = currentCol-2;
+				viewedMap[currentRow][currentCol+1] = ' ';
+				viewedMap[currentRow][currentCol] = 'v';
+				for(int i = 0; i < 5; i++) {
+					viewedMap[startRow--][startCol] = inView[0][i];
 				}
 			}
 		} else if (action == 0) {
