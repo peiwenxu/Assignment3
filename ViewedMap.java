@@ -1,5 +1,9 @@
 
 public class ViewedMap {
+	  final static int EAST   = 0;
+	  final static int NORTH  = 1;
+	  final static int WEST   = 2;
+	  final static int SOUTH  = 3;
 	
 //	private char inView[][];
 //	private char currentView[][];
@@ -49,8 +53,8 @@ public class ViewedMap {
 		}
 	}
 	
-	public void updateView(char dire, char action,char viewedMap[][], int currentRow, int currentCol) {
-		if(action == 'R' || action == 'l') {
+	public void updateView(int dire, char action,char viewedMap[][], char inView[][],int currentRow, int currentCol) {
+		if(action == 'R' || action == 'r') {
 			if(viewedMap[currentRow][currentCol] == '^') {
 				viewedMap[currentRow][currentCol] = '>';
 			} else if(viewedMap[currentRow][currentCol] == '>') {
@@ -71,6 +75,16 @@ public class ViewedMap {
 			} else if(viewedMap[currentRow][currentCol] == '<') {
 				viewedMap[currentRow][currentCol] = 'v';
 			}
+			return;
+		} else if (action == 'F' || action == 'f') {
+			if(dire == NORTH) {
+				int startRow = currentRow-2;
+				int startCol = currentCol-2;
+				for(int i = 0; i < 5; i++) {
+					viewedMap[startRow][startCol++] = inView[0][i];
+				}
+			}
+		} else if (action == 0) {
 			return;
 		}
 	}

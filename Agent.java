@@ -11,6 +11,10 @@ import java.net.*;
 
 public class Agent {
 
+	  final static int EAST   = 0;
+	  final static int NORTH  = 1;
+	  final static int WEST   = 2;
+	  final static int SOUTH  = 3;
   public char get_action( char view[][] ) {
 
     // REPLACE THIS CODE WITH AI TO CHOOSE ACTION
@@ -66,16 +70,17 @@ public class Agent {
     Agent  agent    = new Agent();
     char   view[][] = new char[5][5];
     char viewedMap[][] = new char[80][80];
-    char   action   = 'F';
+    char   action   = 0;
     int port;
     int ch;
     int i,j;
     int initialed = 0;
     int startCol = viewedMap.length/2;
     int startRow = viewedMap.length/2;
+    int curRow = startRow;
+    int curCol = startCol;
+    int direction = NORTH;
     ViewedMap updateView = new ViewedMap();
-    System.out.println(startCol);
-    System.out.println(startRow);
     if( args.length < 2 ) {
       System.out.println("Usage: java Agent -p <port>\n");
       System.exit(-1);
@@ -105,16 +110,8 @@ public class Agent {
             }
           }
         }
-//        if(initialed == 0) {
-//        		ViewedMap updateView = new ViewedMap(viewedMap, view);
-//        }
         agent.print_view( view ); // COMMENT THIS OUT BEFORE SUBMISSION
-        for(int k = 0; k < view.length; k++) {
-        		for(int k2 = 0; k2 < view.length; k2++) {
-        			System.out.print(view[k][k2]);
-        		}
-        		System.out.println();
-        }
+        updateView.updateView(direction, action, viewedMap, view, curRow, curCol);
         //initial
         if(initialed == 0) {
         		updateView.initialMap(view, viewedMap);
@@ -123,6 +120,29 @@ public class Agent {
         System.out.println("here");
         updateView.printViewedMap(viewedMap);
         action = agent.get_action( view );
+        if(action == 'R' || action == 'r') {
+        		if(direction == EAST) {
+        			direction = SOUTH;
+        		} else {
+        			direction -= 1;
+        		}
+        } else if (action == 'L' || action == 'l') {
+        		if(direction == SOUTH) {
+        			direction = EAST;
+        		} else {
+        			direction += 1;
+        		}
+        } else if(action == 'F' || action == 'f') {
+        		if(direction == NORTH) {
+        			curRow -= 1;
+        		} else if(direction == SOUTH) {
+        			curRow += 1;
+        		} else if(direction == EAST) {
+        			curCol += 1;
+        		} else if(direction == WEST) {
+        			curCol -= 1;
+        		}
+        } 
         out.write( action );
       }
     }
