@@ -98,7 +98,7 @@ public class ViewedMap {
 				int startRow = currentRow-2;
 				int startCol = currentCol+2;
 				viewedMap[currentRow][currentCol-1] = ' ';
-				viewedMap[currentRow][currentCol] = 'v';
+				viewedMap[currentRow][currentCol] = '>';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow++][startCol] = inView[0][i];
 				}
@@ -106,7 +106,7 @@ public class ViewedMap {
 				int startRow = currentRow+2;
 				int startCol = currentCol-2;
 				viewedMap[currentRow][currentCol+1] = ' ';
-				viewedMap[currentRow][currentCol] = 'v';
+				viewedMap[currentRow][currentCol] = '<';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow--][startCol] = inView[0][i];
 				}
