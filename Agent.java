@@ -22,7 +22,12 @@ public class Agent {
 	  private boolean on_raft      = false;
 	  private boolean off_map      = false;
 	  private int num_stones_held = 0;
-	  
+	  private LinkedList<Item> TreeList = new LinkedList<Item>();
+	  private LinkedList<Item> KeyList = new LinkedList<Item>();
+	  private LinkedList<Item> AxeList = new LinkedList<Item>();
+	  private LinkedList<Item> StoneList = new LinkedList<Item>();
+	  private LinkedList<Item> DoorList = new LinkedList<Item>();
+	  private LinkedList<Item> TreasureList = new LinkedList<Item>();
 	  
   public boolean isHave_axe() {
 		return have_axe;
@@ -78,6 +83,53 @@ public class Agent {
 
 	public void setNum_stones_held(int num_stones_held) {
 		this.num_stones_held = num_stones_held;
+	}
+	public LinkedList<Item> getTreeList() {
+		return TreeList;
+	}
+
+	public void setTreeList(LinkedList<Item> treeList) {
+		TreeList = treeList;
+	}
+
+	public LinkedList<Item> getKeyList() {
+		return KeyList;
+	}
+
+	public void setKeyList(LinkedList<Item> keyList) {
+		KeyList = keyList;
+	}
+
+	public LinkedList<Item> getAxeList() {
+		return AxeList;
+	}
+
+	public void setAxeList(LinkedList<Item> axeList) {
+		AxeList = axeList;
+	}
+
+	public LinkedList<Item> getStoneList() {
+		return StoneList;
+	}
+
+	public void setStoneList(LinkedList<Item> stoneList) {
+		StoneList = stoneList;
+	}
+
+	public LinkedList<Item> getDoorList() {
+		return DoorList;
+	}
+
+	public void setDoorList(LinkedList<Item> doorList) {
+		DoorList = doorList;
+	}
+
+	public LinkedList<Item> getTreasureList() {
+		return TreasureList;
+	}
+
+	public void setTreasureList(LinkedList<Item> treasureList) {
+		TreasureList = treasureList;
 	}
 
 public char get_action( char view[][] ) {
@@ -145,7 +197,7 @@ public char get_action( char view[][] ) {
     int curRow = startRow;
     int curCol = startCol;
     int direction = NORTH;
-    ViewedMap updateView = new ViewedMap();
+    ViewedMap updateView = new ViewedMap(agent);
     if( args.length < 2 ) {
       System.out.println("Usage: java Agent -p <port>\n");
       System.exit(-1);

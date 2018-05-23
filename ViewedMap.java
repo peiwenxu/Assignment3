@@ -4,7 +4,7 @@ public class ViewedMap {
 	  final static int NORTH  = 1;
 	  final static int WEST   = 2;
 	  final static int SOUTH  = 3;
-	
+	private Agent agent;
 //	private char inView[][];
 //	private char currentView[][];
 //	private char action;
@@ -20,8 +20,8 @@ public class ViewedMap {
 //		this.inView = inView;
 //		this.currentView = currentView;
 //	}
-	public ViewedMap() {
-		
+	public ViewedMap(Agent agent) {
+		this.agent = agent;
 	}
 	
 	public void initialMap(char inView[][], char currentView[][]) {
@@ -35,6 +35,7 @@ public class ViewedMap {
 					currentView[startRow][startCol++] = '^';
 				} else {
 					currentView[startRow][startCol++] = inView[i][i2];
+					collectItem(inView,i,i2);
 				}
 			}
 			startCol = midCol-2;
@@ -84,7 +85,7 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol] = '^';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol++] = inView[0][i];
-					
+					collectItem(inView,0,i);
 				}
 			} else if (dire == SOUTH) {
 				int startRow = currentRow+2;
@@ -93,6 +94,7 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol] = 'v';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol--] = inView[0][i];
+					collectItem(inView,0,i);
 				}
 			} else if(dire == EAST) {
 				int startRow = currentRow-2;
@@ -101,6 +103,7 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol] = '>';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow++][startCol] = inView[0][i];
+					collectItem(inView,0,i);
 				}
 			} else if(dire == WEST) {
 				int startRow = currentRow+2;
@@ -109,6 +112,7 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol] = '<';
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow--][startCol] = inView[0][i];
+					collectItem(inView,0,i);
 				}
 			}
 		} else if (action == 0) {
@@ -164,6 +168,82 @@ public class ViewedMap {
 						agent.setHave_raft(true);
 					}
 				}	
+			}
+		}
+	}
+	
+	public void collectItem(char[][] inView, int row, int col) {
+		if(inView[row][col] == 'T') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getTreeList().size(); i++) {
+				if(this.agent.getTreeList().get(i).getRow() == row &&
+						this.agent.getTreeList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Tree = new Item(row,col,"Tree");
+				this.agent.getTreeList().add(Tree);
+			}
+		} else if(inView[row][col] == 'a') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getAxeList().size(); i++) {
+				if(this.agent.getAxeList().get(i).getRow() == row &&
+						this.agent.getAxeList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Axe = new Item(row,col,"Axe");
+				this.agent.getAxeList().add(Axe);
+			}
+		} else if(inView[row][col] == 'k') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getKeyList().size(); i++) {
+				if(this.agent.getKeyList().get(i).getRow() == row &&
+						this.agent.getKeyList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Key = new Item(row,col,"Key");
+				this.agent.getKeyList().add(Key);
+			}
+		} else if(inView[row][col] == '-') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getDoorList().size(); i++) {
+				if(this.agent.getDoorList().get(i).getRow() == row &&
+						this.agent.getDoorList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Door = new Item(row,col,"Door");
+				this.agent.getDoorList().add(Door);
+			}
+		} else if(inView[row][col] == 'o') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getStoneList().size(); i++) {
+				if(this.agent.getStoneList().get(i).getRow() == row &&
+						this.agent.getStoneList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Stone = new Item(row,col,"Stone");
+				this.agent.getStoneList().add(Stone);
+			}
+		} else if(inView[row][col] == '$') {
+			int exist = 0;
+			for(int i = 0; i < this.agent.getTreasureList().size(); i++) {
+				if(this.agent.getTreasureList().get(i).getRow() == row &&
+						this.agent.getTreasureList().get(i).getCol() == col) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Treasure = new Item(row,col,"Treasure");
+				this.agent.getTreasureList().add(Treasure);
 			}
 		}
 	}
