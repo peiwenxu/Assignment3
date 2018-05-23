@@ -34,8 +34,9 @@ public class ViewedMap {
 				if(i2 == 2 && i == 2) {
 					currentView[startRow][startCol++] = '^';
 				} else {
-					currentView[startRow][startCol++] = inView[i][i2];
-					collectItem(inView,i,i2);
+					currentView[startRow][startCol] = inView[i][i2];
+					collectItem(inView,i,i2,startRow,startCol);
+					startCol++;
 				}
 			}
 			startCol = midCol-2;
@@ -84,8 +85,9 @@ public class ViewedMap {
 				viewedMap[currentRow+1][currentCol] = ' ';
 				viewedMap[currentRow][currentCol] = '^';
 				for(int i = 0; i < 5; i++) {
-					viewedMap[startRow][startCol++] = inView[0][i];
-					collectItem(inView,0,i);
+					viewedMap[startRow][startCol] = inView[0][i];
+					collectItem(inView,0,i,startRow,startCol);
+					startCol++;
 				}
 			} else if (dire == SOUTH) {
 				int startRow = currentRow+2;
@@ -93,8 +95,9 @@ public class ViewedMap {
 				viewedMap[currentRow-1][currentCol] = ' ';
 				viewedMap[currentRow][currentCol] = 'v';
 				for(int i = 0; i < 5; i++) {
-					viewedMap[startRow][startCol--] = inView[0][i];
-					collectItem(inView,0,i);
+					viewedMap[startRow][startCol] = inView[0][i];
+					collectItem(inView,0,i,startRow,startCol);
+					startCol--;
 				}
 			} else if(dire == EAST) {
 				int startRow = currentRow-2;
@@ -102,8 +105,9 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol-1] = ' ';
 				viewedMap[currentRow][currentCol] = '>';
 				for(int i = 0; i < 5; i++) {
-					viewedMap[startRow++][startCol] = inView[0][i];
-					collectItem(inView,0,i);
+					viewedMap[startRow][startCol] = inView[0][i];
+					collectItem(inView,0,i,startRow,startCol);
+					startRow++;
 				}
 			} else if(dire == WEST) {
 				int startRow = currentRow+2;
@@ -111,8 +115,9 @@ public class ViewedMap {
 				viewedMap[currentRow][currentCol+1] = ' ';
 				viewedMap[currentRow][currentCol] = '<';
 				for(int i = 0; i < 5; i++) {
-					viewedMap[startRow--][startCol] = inView[0][i];
-					collectItem(inView,0,i);
+					viewedMap[startRow][startCol] = inView[0][i];
+					collectItem(inView,0,i,startRow,startCol);
+					startRow--;
 				}
 			}
 		} else if (action == 0) {
@@ -172,77 +177,77 @@ public class ViewedMap {
 		}
 	}
 	
-	public void collectItem(char[][] inView, int row, int col) {
+	public void collectItem(char[][] inView, int row, int col,int viewRow, int viewCol) {
 		if(inView[row][col] == 'T') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getTreeList().size(); i++) {
-				if(this.agent.getTreeList().get(i).getRow() == row &&
-						this.agent.getTreeList().get(i).getCol() == col) {
+				if(this.agent.getTreeList().get(i).getRow() == viewRow &&
+						this.agent.getTreeList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Tree = new Item(row,col,"Tree");
+				Item Tree = new Item(viewRow,viewCol,"Tree");
 				this.agent.getTreeList().add(Tree);
 			}
 		} else if(inView[row][col] == 'a') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getAxeList().size(); i++) {
-				if(this.agent.getAxeList().get(i).getRow() == row &&
-						this.agent.getAxeList().get(i).getCol() == col) {
+				if(this.agent.getAxeList().get(i).getRow() == viewRow &&
+						this.agent.getAxeList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Axe = new Item(row,col,"Axe");
+				Item Axe = new Item(viewRow,viewCol,"Axe");
 				this.agent.getAxeList().add(Axe);
 			}
 		} else if(inView[row][col] == 'k') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getKeyList().size(); i++) {
-				if(this.agent.getKeyList().get(i).getRow() == row &&
-						this.agent.getKeyList().get(i).getCol() == col) {
+				if(this.agent.getKeyList().get(i).getRow() == viewRow &&
+						this.agent.getKeyList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Key = new Item(row,col,"Key");
+				Item Key = new Item(viewRow,viewCol,"Key");
 				this.agent.getKeyList().add(Key);
 			}
 		} else if(inView[row][col] == '-') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getDoorList().size(); i++) {
-				if(this.agent.getDoorList().get(i).getRow() == row &&
-						this.agent.getDoorList().get(i).getCol() == col) {
+				if(this.agent.getDoorList().get(i).getRow() == viewRow &&
+						this.agent.getDoorList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Door = new Item(row,col,"Door");
+				Item Door = new Item(viewRow,viewCol,"Door");
 				this.agent.getDoorList().add(Door);
 			}
 		} else if(inView[row][col] == 'o') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getStoneList().size(); i++) {
-				if(this.agent.getStoneList().get(i).getRow() == row &&
-						this.agent.getStoneList().get(i).getCol() == col) {
+				if(this.agent.getStoneList().get(i).getRow() == viewRow &&
+						this.agent.getStoneList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Stone = new Item(row,col,"Stone");
+				Item Stone = new Item(viewRow,viewCol,"Stone");
 				this.agent.getStoneList().add(Stone);
 			}
 		} else if(inView[row][col] == '$') {
 			int exist = 0;
 			for(int i = 0; i < this.agent.getTreasureList().size(); i++) {
-				if(this.agent.getTreasureList().get(i).getRow() == row &&
-						this.agent.getTreasureList().get(i).getCol() == col) {
+				if(this.agent.getTreasureList().get(i).getRow() == viewRow &&
+						this.agent.getTreasureList().get(i).getCol() == viewCol) {
 					exist = 1;
 				}
 			}
 			if(exist == 0) {
-				Item Treasure = new Item(row,col,"Treasure");
+				Item Treasure = new Item(viewRow,viewCol,"Treasure");
 				this.agent.getTreasureList().add(Treasure);
 			}
 		}

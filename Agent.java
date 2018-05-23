@@ -236,6 +236,32 @@ public char get_action( char view[][] ) {
         }
         System.out.println("here");
         updateView.printViewedMap(viewedMap);
+        System.out.println("CurrentRow: " +curRow);
+        System.out.println("CurrentCol: " +curCol);
+        System.out.println("Keys:");
+        for(int o = 0; o < agent.getKeyList().size(); o++) {
+        		System.out.println("Row: " +agent.getKeyList().get(o).getRow() + " Col: " +agent.getKeyList().get(o).getCol());
+        }
+        System.out.println("Trees:");
+        for(int o = 0; o < agent.getTreeList().size(); o++) {
+        		System.out.println("Row: " +agent.getTreeList().get(o).getRow() +" Col: " + agent.getTreeList().get(o).getCol());
+        }
+        System.out.println("Axes:");
+        for(int o = 0; o < agent.getAxeList().size(); o++) {
+        		System.out.println("Row: " +agent.getAxeList().get(o).getRow() +" Col: " + agent.getAxeList().get(o).getCol());
+        }
+        System.out.println("Stones:");
+        for(int o = 0; o < agent.getStoneList().size(); o++) {
+        		System.out.println("Row: " +agent.getStoneList().get(o).getRow() +" Col: " + agent.getStoneList().get(o).getCol());
+        }
+        System.out.println("Doors:");
+        for(int o = 0; o < agent.getDoorList().size(); o++) {
+        		System.out.println("Row: " +agent.getDoorList().get(o).getRow() +" Col: " + agent.getDoorList().get(o).getCol());
+        }
+        System.out.println("Treasures:");
+        for(int o = 0; o < agent.getTreasureList().size(); o++) {
+        		System.out.println("Row: " +agent.getTreasureList().get(o).getRow() +" Col: " + agent.getTreasureList().get(o).getCol());
+        }
         action = agent.get_action( view );
         if(action == 'R' || action == 'r') {
         		if(direction == EAST) {
