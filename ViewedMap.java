@@ -116,6 +116,59 @@ public class ViewedMap {
 		}
 	}
 	
+	public void chop_unlock(int dire, Agent agent, char action, char viewedMap[][], int currentRow, int currentCol) {
+		if(action == 'C' || action == 'c') {
+			if(agent.isHave_axe() == true) {
+				if(dire == NORTH) {
+					if(viewedMap[currentRow-1][currentCol] == 'T') {
+						viewedMap[currentRow-1][currentCol] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == EAST) {
+					if(viewedMap[currentRow][currentCol+1] == 'T') {
+						viewedMap[currentRow][currentCol+1] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == SOUTH) {
+					if(viewedMap[currentRow+1][currentCol] == 'T') {
+						viewedMap[currentRow+1][currentCol] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == WEST) {
+					if(viewedMap[currentRow][currentCol-1] == 'T') {
+						viewedMap[currentRow][currentCol-1] = ' ';
+						agent.setHave_raft(true);
+					}
+				}	
+			}
+		} else if (action == 'U' || action == 'u') {
+			if(agent.isHave_key() == true) {
+				if(dire == NORTH) {
+					if(viewedMap[currentRow-1][currentCol] == 'T') {
+						viewedMap[currentRow-1][currentCol] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == EAST) {
+					if(viewedMap[currentRow][currentCol+1] == 'T') {
+						viewedMap[currentRow][currentCol+1] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == SOUTH) {
+					if(viewedMap[currentRow+1][currentCol] == 'T') {
+						viewedMap[currentRow+1][currentCol] = ' ';
+						agent.setHave_raft(true);
+					}
+				} else if(dire == WEST) {
+					if(viewedMap[currentRow][currentCol-1] == 'T') {
+						viewedMap[currentRow][currentCol-1] = ' ';
+						agent.setHave_raft(true);
+					}
+				}	
+			}
+		}
+	}
+	
+	
 //	public char getAction(char action) {
 //		char 
 //		

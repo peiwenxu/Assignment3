@@ -15,14 +15,79 @@ public class Agent {
 	  final static int NORTH  = 1;
 	  final static int WEST   = 2;
 	  final static int SOUTH  = 3;
-  public char get_action( char view[][] ) {
+	  private boolean have_axe     = false;
+	  private boolean have_key     = false;
+	  private boolean have_treasure= false;
+	  private boolean have_raft    = false;
+	  private boolean on_raft      = false;
+	  private boolean off_map      = false;
+	  private int num_stones_held = 0;
+	  
+	  
+  public boolean isHave_axe() {
+		return have_axe;
+	}
+
+	public void setHave_axe(boolean have_axe) {
+		this.have_axe = have_axe;
+	}
+
+	public boolean isHave_key() {
+		return have_key;
+	}
+
+	public void setHave_key(boolean have_key) {
+		this.have_key = have_key;
+	}
+
+	public boolean isHave_treasure() {
+		return have_treasure;
+	}
+
+	public void setHave_treasure(boolean have_treasure) {
+		this.have_treasure = have_treasure;
+	}
+
+	public boolean isHave_raft() {
+		return have_raft;
+	}
+
+	public void setHave_raft(boolean have_raft) {
+		this.have_raft = have_raft;
+	}
+
+	public boolean isOn_raft() {
+		return on_raft;
+	}
+
+	public void setOn_raft(boolean on_raft) {
+		this.on_raft = on_raft;
+	}
+
+	public boolean isOff_map() {
+		return off_map;
+	}
+
+	public void setOff_map(boolean off_map) {
+		this.off_map = off_map;
+	}
+
+	public int getNum_stones_held() {
+		return num_stones_held;
+	}
+
+	public void setNum_stones_held(int num_stones_held) {
+		this.num_stones_held = num_stones_held;
+	}
+
+public char get_action( char view[][] ) {
 
     // REPLACE THIS CODE WITH AI TO CHOOSE ACTION
 
     int ch=0;
 
     System.out.print("Enter Action(s): ");
-
+    
     try {
       while ( ch != -1 ) {
         // read character from keyboard
@@ -134,15 +199,85 @@ public class Agent {
         		}
         } else if(action == 'F' || action == 'f') {
         		if(direction == NORTH) {
-        			curRow -= 1;
+        			switch(viewedMap[curRow-1][curCol]) {
+        				case '*':case'T':case'-':
+        					break;
+        				case 'k':
+        					agent.have_key = true;
+        					curRow -= 1;
+        				case 'a':
+        					agent.have_axe = true;
+        					curRow -= 1;
+        				case '$':
+        					agent.have_treasure = true;
+        					curRow -= 1;
+        				case 'o':
+        					agent.num_stones_held++;
+        					curRow -= 1;
+        				default:
+        					curRow -= 1;
+        			}
         		} else if(direction == SOUTH) {
-        			curRow += 1;
+        			switch(viewedMap[curRow+1][curCol]) {
+	    				case '*':case'T':case'-':
+	    					break;
+	    				case 'k':
+	    					agent.have_key = true;
+	    					curRow += 1;
+	    				case 'a':
+	    					agent.have_axe = true;
+	    					curRow += 1;
+	    				case '$':
+	    					agent.have_treasure = true;
+	    					curRow += 1;
+	    				case 'o':
+	    					agent.num_stones_held++;
+	    					curRow += 1;
+    					default:
+    						curRow += 1;
+        			}
         		} else if(direction == EAST) {
-        			curCol += 1;
+        			switch(viewedMap[curRow][curCol+1]) {
+	    				case '*':case'T':case'-':
+	    					break;
+	    				case 'k':
+	    					agent.have_key = true;
+	    					curCol += 1;
+	    				case 'a':
+	    					agent.have_axe = true;
+	    					curCol += 1;
+	    				case '$':
+	    					agent.have_treasure = true;
+	    					curCol += 1;
+	    				case 'o':
+	    					agent.num_stones_held++;
+	    					curCol += 1;
+    					default:
+    						curCol += 1;
+        			}
         		} else if(direction == WEST) {
-        			curCol -= 1;
+        			switch(viewedMap[curRow][curCol-1]) {
+	    				case '*':case'T':case'-':
+	    					break;
+	    				case 'k':
+	    					agent.have_key = true;
+	    					curCol -= 1;
+	    				case 'a':
+	    					agent.have_axe = true;
+	    					curCol -= 1;
+	    				case '$':
+	    					agent.have_treasure = true;
+	    					curCol -= 1;
+	    				case 'o':
+	    					agent.num_stones_held++;
+	    					curCol -= 1;
+    					default:
+    						curCol -= 1;
+        			}
         		}
-        } 
+        } else if (action == 'C' || action == 'c' || action == 'U' || action == 'u') {
+        		
+        }
         out.write( action );
       }
     }
