@@ -3,7 +3,6 @@
  *  Sample Agent for Text-Based Adventure Game
  *  COMP3411/9414/9814 Artificial Intelligence
  *  UNSW Session 1, 2018
- *  This is a test commit on github
 */
 
 import java.util.*;
@@ -206,17 +205,22 @@ public char get_action( char view[][] ) {
         				case 'k':
         					agent.have_key = true;
         					curRow -= 1;
+        					break;
         				case 'a':
         					agent.have_axe = true;
         					curRow -= 1;
+        					break;
         				case '$':
         					agent.have_treasure = true;
         					curRow -= 1;
+        					break;
         				case 'o':
         					agent.num_stones_held++;
         					curRow -= 1;
+        					break;
         				default:
         					curRow -= 1;
+        					break;
         			}
         		} else if(direction == SOUTH) {
         			switch(viewedMap[curRow+1][curCol]) {
@@ -225,17 +229,22 @@ public char get_action( char view[][] ) {
 	    				case 'k':
 	    					agent.have_key = true;
 	    					curRow += 1;
+	    					break;
 	    				case 'a':
 	    					agent.have_axe = true;
 	    					curRow += 1;
+	    					break;
 	    				case '$':
 	    					agent.have_treasure = true;
 	    					curRow += 1;
+	    					break;
 	    				case 'o':
 	    					agent.num_stones_held++;
 	    					curRow += 1;
+	    					break;
     					default:
     						curRow += 1;
+    						break;
         			}
         		} else if(direction == EAST) {
         			switch(viewedMap[curRow][curCol+1]) {
@@ -244,17 +253,22 @@ public char get_action( char view[][] ) {
 	    				case 'k':
 	    					agent.have_key = true;
 	    					curCol += 1;
+	    					break;
 	    				case 'a':
 	    					agent.have_axe = true;
 	    					curCol += 1;
+	    					break;
 	    				case '$':
 	    					agent.have_treasure = true;
 	    					curCol += 1;
+	    					break;
 	    				case 'o':
 	    					agent.num_stones_held++;
 	    					curCol += 1;
+	    					break;
     					default:
     						curCol += 1;
+    						break;
         			}
         		} else if(direction == WEST) {
         			switch(viewedMap[curRow][curCol-1]) {
@@ -263,17 +277,22 @@ public char get_action( char view[][] ) {
 	    				case 'k':
 	    					agent.have_key = true;
 	    					curCol -= 1;
+	    					break;
 	    				case 'a':
 	    					agent.have_axe = true;
 	    					curCol -= 1;
+	    					break;
 	    				case '$':
 	    					agent.have_treasure = true;
 	    					curCol -= 1;
+	    					break;
 	    				case 'o':
 	    					agent.num_stones_held++;
 	    					curCol -= 1;
+	    					break;
     					default:
     						curCol -= 1;
+    						break;
         			}
         		}
         } else if (action == 'C' || action == 'c' || action == 'U' || action == 'u') {
