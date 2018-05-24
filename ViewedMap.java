@@ -1,29 +1,29 @@
 
 public class ViewedMap {
-	  final static int EAST   = 0;
-	  final static int NORTH  = 1;
-	  final static int WEST   = 2;
-	  final static int SOUTH  = 3;
+	final static int EAST   = 0;
+	final static int NORTH  = 1;
+	final static int WEST   = 2;
+	final static int SOUTH  = 3;
 	private Agent agent;
-//	private char inView[][];
-//	private char currentView[][];
-//	private char action;
-	
-	
-//	public ViewedMap(char inView[][], char currentView[][],char action) {
-//		this.inView = inView;
-//		this.currentView = currentView;
-//		this.action = action;
-//	}
-//	
-//	public ViewedMap(char inView[][], char currentView[][]) {
-//		this.inView = inView;
-//		this.currentView = currentView;
-//	}
+	//	private char inView[][];
+	//	private char currentView[][];
+	//	private char action;
+
+
+	//	public ViewedMap(char inView[][], char currentView[][],char action) {
+	//		this.inView = inView;
+	//		this.currentView = currentView;
+	//		this.action = action;
+	//	}
+	//
+	//	public ViewedMap(char inView[][], char currentView[][]) {
+	//		this.inView = inView;
+	//		this.currentView = currentView;
+	//	}
 	public ViewedMap(Agent agent) {
 		this.agent = agent;
 	}
-	
+
 	public void initialMap(char inView[][], char currentView[][]) {
 		int midRow = currentView.length/2;
 		int midCol = (currentView.length)/2;
@@ -43,7 +43,7 @@ public class ViewedMap {
 			startRow++;
 		}
 	}
-	
+
 	public void printViewedMap(char viewedMap[][]) {
 		for(int i = 0; i < viewedMap.length; i++) {
 			for(int i2 = 0; i2 < viewedMap.length; i2++) {
@@ -54,7 +54,7 @@ public class ViewedMap {
 			System.out.println();
 		}
 	}
-	
+
 	public void updateView(int dire, char action,char viewedMap[][], char inView[][],int currentRow, int currentCol) {
 		if(action == 'R' || action == 'r') {
 			if(viewedMap[currentRow][currentCol] == '^') {
@@ -124,7 +124,7 @@ public class ViewedMap {
 			return;
 		}
 	}
-	
+
 	public void chop_unlock(int dire, Agent agent, char action, char viewedMap[][], int currentRow, int currentCol) {
 		if(action == 'C' || action == 'c') {
 			if(agent.isHave_axe() == true) {
@@ -148,7 +148,7 @@ public class ViewedMap {
 						viewedMap[currentRow][currentCol-1] = ' ';
 						agent.setHave_raft(true);
 					}
-				}	
+				}
 			}
 		} else if (action == 'U' || action == 'u') {
 			if(agent.isHave_key() == true) {
@@ -172,11 +172,11 @@ public class ViewedMap {
 						viewedMap[currentRow][currentCol-1] = ' ';
 						agent.setHave_raft(true);
 					}
-				}	
+				}
 			}
 		}
 	}
-	
+
 	public void collectItem(char[][] inView, int row, int col,int viewRow, int viewCol) {
 		if(inView[row][col] == 'T') {
 			int exist = 0;
@@ -252,17 +252,17 @@ public class ViewedMap {
 			}
 		}
 	}
-	
-	
+
+
 //	public char getAction(char action) {
-//		char 
-//		
+//		char
+//
 //		return action;
 //	}
-//	
-//	public 
-//	
-	
-	
-	
+//
+//	public
+//
+
+
+
 }
