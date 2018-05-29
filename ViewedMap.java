@@ -27,6 +27,8 @@ public class ViewedMap {
 	public void initialMap(char inView[][], char currentView[][]) {
 		int midRow = currentView.length/2;
 		int midCol = (currentView.length)/2;
+		Coordinate Viewed = new Coordinate(midRow,midCol);
+		this.agent.getViewedPlace().add(Viewed);
 		int startRow = midRow-2;
 		int startCol = midCol-2;
 		for(int i = 0; i < 5; i++) {
@@ -79,6 +81,7 @@ public class ViewedMap {
 			}
 			return;
 		} else if (action == 'F' || action == 'f') {
+			//this can be move success or fail
 			if(dire == NORTH) {
 				int startRow = currentRow-2;
 				int startCol = currentCol-2;
@@ -153,24 +156,24 @@ public class ViewedMap {
 		} else if (action == 'U' || action == 'u') {
 			if(agent.isHave_key() == true) {
 				if(dire == NORTH) {
-					if(viewedMap[currentRow-1][currentCol] == 'T') {
+					if(viewedMap[currentRow-1][currentCol] == '-') {
 						viewedMap[currentRow-1][currentCol] = ' ';
-						agent.setHave_raft(true);
+						//agent.setHave_raft(true);
 					}
 				} else if(dire == EAST) {
-					if(viewedMap[currentRow][currentCol+1] == 'T') {
+					if(viewedMap[currentRow][currentCol+1] == '-') {
 						viewedMap[currentRow][currentCol+1] = ' ';
-						agent.setHave_raft(true);
+						//agent.setHave_raft(true);
 					}
 				} else if(dire == SOUTH) {
-					if(viewedMap[currentRow+1][currentCol] == 'T') {
+					if(viewedMap[currentRow+1][currentCol] == '-') {
 						viewedMap[currentRow+1][currentCol] = ' ';
-						agent.setHave_raft(true);
+						//agent.setHave_raft(true);
 					}
 				} else if(dire == WEST) {
-					if(viewedMap[currentRow][currentCol-1] == 'T') {
+					if(viewedMap[currentRow][currentCol-1] == '-') {
 						viewedMap[currentRow][currentCol-1] = ' ';
-						agent.setHave_raft(true);
+						//agent.setHave_raft(true);
 					}
 				}
 			}
@@ -253,6 +256,9 @@ public class ViewedMap {
 		}
 	}
 
+	
+	
+	
 
 //	public char getAction(char action) {
 //		char

@@ -11,6 +11,7 @@ import java.net.*;
 
 public class Agent {
 
+	
 	final static int EAST             			       = 0;
 	final static int NORTH  						 = 1;
 	final static int WEST 					          = 2;
@@ -28,6 +29,7 @@ public class Agent {
 	private LinkedList<Item> StoneList       = new LinkedList<Item>();
 	private LinkedList<Item> DoorList         = new LinkedList<Item>();
 	private LinkedList<Item> TreasureList   = new LinkedList<Item>();
+	private LinkedList<Coordinate> ViewedPlace = new LinkedList<Coordinate>();
 
     public boolean isHave_axe() {
 		return have_axe;
@@ -131,6 +133,14 @@ public class Agent {
 	public void setTreasureList(LinkedList<Item> treasureList) {
 		TreasureList = treasureList;
 	}
+	
+	public LinkedList<Coordinate> getViewedPlace() {
+		return ViewedPlace;
+	}
+
+	public void setViewedPlace(LinkedList<Coordinate> viewedPlace) {
+		ViewedPlace = viewedPlace;
+	}
 
 	public char get_action( char view[][] ) {
 	
@@ -212,9 +222,9 @@ public class Agent {
 	    }
 	
 	    try { // scan 5-by-5 wintow around current location
-	      	while( true ) {
+    		while( true ) {
 		        for( i=0; i < 5; i++ ) {
-			        for( j=0; j < 5; j++ ) {
+		        		for( j=0; j < 5; j++ ) {
 			            if( !(( i == 2 )&&( j == 2 ))) {
 			              	ch = in.read();
 							if( ch == -1 ) {
@@ -228,8 +238,8 @@ public class Agent {
 		        updateView.updateView(direction, action, viewedMap, view, curRow, curCol);
 		        //initial
 		        if(initialed == 0) {
-	        		updateView.initialMap(view, viewedMap);
-	        		initialed = 1;
+	        			updateView.initialMap(view, viewedMap);
+	        			initialed = 1;
 		        }
 		        System.out.println("here");
 		        updateView.printViewedMap(viewedMap);
@@ -237,28 +247,39 @@ public class Agent {
 		        System.out.println("CurrentCol: " +curCol);
 		        System.out.println("Keys:");
 		        for(int o = 0; o < agent.getKeyList().size(); o++) {
-	        		System.out.println("Row: " +agent.getKeyList().get(o).getRow() + " Col: " +agent.getKeyList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getKeyList().get(o).getRow() + " Col: " +agent.getKeyList().get(o).getCol());
 		        }
 		        System.out.println("Trees:");
 		        for(int o = 0; o < agent.getTreeList().size(); o++) {
-	        		System.out.println("Row: " +agent.getTreeList().get(o).getRow() +" Col: " + agent.getTreeList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getTreeList().get(o).getRow() +" Col: " + agent.getTreeList().get(o).getCol());
 		        }
-		        System.out.println("Axes:");
+		        	System.out.println("Axes:");
 		        for(int o = 0; o < agent.getAxeList().size(); o++) {
-	        		System.out.println("Row: " +agent.getAxeList().get(o).getRow() +" Col: " + agent.getAxeList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getAxeList().get(o).getRow() +" Col: " + agent.getAxeList().get(o).getCol());
 		        }
 		        System.out.println("Stones:");
 		        for(int o = 0; o < agent.getStoneList().size(); o++) {
-	        		System.out.println("Row: " +agent.getStoneList().get(o).getRow() +" Col: " + agent.getStoneList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getStoneList().get(o).getRow() +" Col: " + agent.getStoneList().get(o).getCol());
 		        }
 		        System.out.println("Doors:");
 		        for(int o = 0; o < agent.getDoorList().size(); o++) {
-	        		System.out.println("Row: " +agent.getDoorList().get(o).getRow() +" Col: " + agent.getDoorList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getDoorList().get(o).getRow() +" Col: " + agent.getDoorList().get(o).getCol());
 		        }
 		        System.out.println("Treasures:");
 		        for(int o = 0; o < agent.getTreasureList().size(); o++) {
-	        		System.out.println("Row: " +agent.getTreasureList().get(o).getRow() +" Col: " + agent.getTreasureList().get(o).getCol());
+	        			System.out.println("Row: " +agent.getTreasureList().get(o).getRow() +" Col: " + agent.getTreasureList().get(o).getCol());
 		        }
+		        System.out.println("Where we viewed?");
+		        for(int o = 0; o < agent.getViewedPlace().size(); o++) {
+		        		System.out.println("Row: " + agent.getViewedPlace().get(o).getRow() + " Col: " + agent.getViewedPlace().get(o).getCol());
+		        }
+		        System.out.println("How mant stone we have: " + agent.getNum_stones_held());
+		        System.out.println("Have axe? " + agent.isHave_axe());
+		        System.out.println("Have key? " + agent.isHave_key());
+		        System.out.println("Have raft? " + agent.isHave_raft());
+		        System.out.println("Have treasure? " + agent.isHave_treasure());
+		        System.out.println("On raft? " + agent.isOn_raft());
+		        System.out.println("Off map? " + agent.isOff_map());
 	        	action = agent.get_action( view );
 	        	if(action == 'R' || action == 'r') {
 	        		if(direction == EAST) {
@@ -370,8 +391,19 @@ public class Agent {
 	    						break;
 	        			}
 	        		}
+    				int exist = 0;
+				for(int y = 0; y < agent.getViewedPlace().size(); y++) {
+					if(curRow == agent.getViewedPlace().get(y).getRow()
+							&& curCol == agent.getViewedPlace().get(y).getCol()) {
+						exist = 1;
+					}
+				}
+				if(exist == 0) {
+					Coordinate newPlace = new Coordinate(curRow,curCol);
+					agent.getViewedPlace().add(newPlace);
+				}
 	        	} else if (action == 'C' || action == 'c' || action == 'U' || action == 'u') {
-	
+	        		updateView.chop_unlock(direction, agent, action, viewedMap, curRow, curCol);
 	        	}
 	        	out.write( action );
 	      	}
@@ -385,7 +417,7 @@ public class Agent {
 				socket.close();
 			}
 	      	catch( IOException e ) {
-	    	}
+	      	}
 	  	}
 	}
 }
