@@ -29,10 +29,10 @@ public class ViewedMap {
 		int midCol = (currentView.length)/2;
 		Coordinate Viewed = new Coordinate(midRow,midCol);
 		this.agentState.getViewedPlace().add(Viewed);
-		Coordinate topRight = new Coordinate(midRow-2,midCol+2);
-		Coordinate topLeft = new Coordinate(midRow-2,midCol-2);
-		Coordinate bottomRight = new Coordinate(midRow+2,midCol+2);
-		Coordinate bottomLeft = new Coordinate(midRow+2,midCol-2);
+		Item topRight = new Item(midRow-2,midCol+2,"tr");
+		Item topLeft = new Item(midRow-2,midCol-2,"tl");
+		Item bottomRight = new Item(midRow+2,midCol+2,"br");
+		Item bottomLeft = new Item(midRow+2,midCol-2,"bl");
 		this.agentState.getExploreView().add(topRight);
 		this.agentState.getExploreView().add(topLeft);
 		this.agentState.getExploreView().add(bottomLeft);

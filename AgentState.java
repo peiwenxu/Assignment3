@@ -21,7 +21,7 @@ public class AgentState {
 	private LinkedList<Item> TreasureList   = new LinkedList<Item>();
 	private LinkedList<Coordinate> ViewedPlace = new LinkedList<Coordinate>();
 	private LinkedList<Coordinate> pendingMove = new LinkedList<Coordinate>();
-	private LinkedList<Coordinate> exploreView = new LinkedList<Coordinate>();
+	private LinkedList<Item> exploreView = new LinkedList<Item>();
 	private char viewedMap[][] = new char[80][80];
 	private int startCol = viewedMap.length/2;
 	private int startRow = viewedMap.length/2;
@@ -185,12 +185,12 @@ public class AgentState {
 	}
 
 
-	public LinkedList<Coordinate> getExploreView() {
+	public LinkedList<Item> getExploreView() {
 		return exploreView;
 	}
 
 
-	public void setExploreView(LinkedList<Coordinate> exploreView) {
+	public void setExploreView(LinkedList<Item> exploreView) {
 		this.exploreView = exploreView;
 	}
 
