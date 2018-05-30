@@ -42,19 +42,23 @@ public class Search {
 				case NORTH:
 					curPoint.getActions().add('f');
 					curPoint.setDirection(NORTH);
+					break;
 				case EAST:
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(EAST);
+					break;
 				case SOUTH:
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(SOUTH);
+					break;
 				case WEST:
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(WEST);
+					break;
 			}
 		} else if(preDir == EAST) {
 			switch(position) {
@@ -62,18 +66,22 @@ public class Search {
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(NORTH);
+					break;
 				case EAST:
 					curPoint.getActions().add('f');
 					curPoint.setDirection(EAST);
+					break;
 				case SOUTH:
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(SOUTH);
+					break;
 				case WEST:
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(WEST);
+					break;
 			}
 		} else if(preDir == SOUTH) {
 			switch(position) {
@@ -82,17 +90,21 @@ public class Search {
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(NORTH);
+					break;
 				case EAST:
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(EAST);
+					break;
 				case SOUTH:
 					curPoint.getActions().add('f');
 					curPoint.setDirection(SOUTH);
+					break;
 				case WEST:
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(WEST);
+					break;
 			}
 		} else if(preDir == WEST) {
 			switch(position) {
@@ -100,25 +112,30 @@ public class Search {
 					curPoint.getActions().add('r');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(NORTH);
+					break;
 				case EAST:
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(EAST);
+					break;
 				case SOUTH:
 					curPoint.getActions().add('l');
 					curPoint.getActions().add('f');
 					curPoint.setDirection(SOUTH);
+					break;
 				case WEST:
 					curPoint.getActions().add('f');
 					curPoint.setDirection(WEST);
+					break;
 			}
 		}
 	}
 	
 	
 	
-	public LinkedList<Character> AstartSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
+	public LinkedList<Character> AstarSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
+		System.out.println("utututu");
 		int board = viewedMap.length;
 		PointState startPoint = new PointState(startRow, startCol, new LinkedList<Character>());
 		startPoint.setDirection(curDirection);
@@ -129,6 +146,7 @@ public class Search {
 		queue.add(startPoint);
 		while(!queue.isEmpty()) {
 			PointState curr = priorityQueue(queue);
+			System.out.println("this point row: " + curr.getCurRow() + " this point Col: " + curr.getCurCol());
 			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
 				return curr.getActions();
 			} else {
@@ -138,7 +156,7 @@ public class Search {
 				if(curr.getCurRow()-1 >= 0) {
 					switch(viewedMap[curr.getCurRow()-1][curr.getCurCol()]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol());
+							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
 							toAdd.add(northPoint);
 							makeDirection(curr, northPoint, NORTH);
 					}
@@ -148,7 +166,7 @@ public class Search {
 				if(curr.getCurCol()+1 < board) {
 					switch(viewedMap[curr.getCurRow()][curr.getCurCol()+1]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState eastPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1);
+							PointState eastPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
 							toAdd.add(eastPoint);
 							makeDirection(curr, eastPoint, EAST);
 					}		
@@ -157,7 +175,7 @@ public class Search {
 				if(curr.getCurRow()+1 < board) {
 					switch(viewedMap[curr.getCurRow()+1][curr.getCurCol()]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState southPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1);
+							PointState southPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
 							toAdd.add(southPoint);
 							makeDirection(curr, southPoint, SOUTH);
 					}
@@ -166,7 +184,7 @@ public class Search {
 				if(curr.getCurCol()-1 >= 0) {
 					switch(viewedMap[curr.getCurRow()][curr.getCurCol()-1]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1);
+							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
 							toAdd.add(westPoint);
 							makeDirection(curr, westPoint, WEST);
 					}

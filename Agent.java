@@ -74,6 +74,7 @@ public class Agent {
     int i,j;
     AgentState agentState = new AgentState();
     ViewedMap updateView = new ViewedMap(agentState);
+    Search search = new Search();
     if( args.length < 2 ) {
       System.out.println("Usage: java Agent -p <port>\n");
       System.exit(-1);
@@ -113,9 +114,30 @@ public class Agent {
         System.out.println("here");
         updateView.printViewedMap(agentState.getViewedMap());
         updateView.printAgentDetail();
-        action = agent.get_action( view );
+        // test to get the key
+        Item key = agentState.getKeyList().getFirst();
+        int keyRow = key.getRow();
+        int keyCol = key.getCol();
+        LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+        			keyRow, keyCol, agentState.getViewedMap(), agentState.getDirection());
+        for(Character ch2: actions) {
+        		System.out.println(ch2);
+        		
+        		out.write( ch2 );
+        		try        
+        		{
+        		    Thread.sleep(1000);
+        		} 
+        		catch(InterruptedException ex) 
+        		{
+        		    Thread.currentThread().interrupt();
+        		}
+        }
+        
+        //action = agent.get_action( view );
         updateView.updateAgentDetail(action);
-        out.write( action );
+        //out.write( action );
+        return;
       }
     }
     catch( IOException e ) {
