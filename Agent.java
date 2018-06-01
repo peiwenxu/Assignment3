@@ -14,31 +14,52 @@ public class Agent {
 	final static int NORTH  						 = 1;
 	final static int WEST 					          = 2;
 	final static int SOUTH  					   	 = 3;
-  public char get_action( char view[][] ) {
+	private AiAction aiAction;
+	
+	
+	
+  public AiAction getAiAction() {
+		return aiAction;
+	}
 
-    // REPLACE THIS CODE WITH AI TO CHOOSE ACTION
+	public void setAiAction(AiAction aiAction) {
+		this.aiAction = aiAction;
+	}
 
-    int ch=0;
+public char get_action( char[][] view ) {
 
-    System.out.print("Enter Action(s): ");
-
-    try {
-      while ( ch != -1 ) {
-        // read character from keyboard
-        ch  = System.in.read();
-
-        switch( ch ) { // if character is a valid action, return it
-         case 'F': case 'L': case 'R': case 'C': case 'U':
-         case 'f': case 'l': case 'r': case 'c': case 'u':
-           return((char) ch );
-        }
-      }
-    }
-    catch (IOException e) {
-      System.out.println ("IO error:" + e );
-    }
-
-    return 0;
+//    // REPLACE THIS CODE WITH AI TO CHOOSE ACTION
+//
+//    int ch=0;
+//
+//    System.out.print("Enter Action(s): ");
+//
+//    try {
+//      while ( ch != -1 ) {
+//        // read character from keyboard
+//        ch  = System.in.read();
+//
+//        switch( ch ) { // if character is a valid action, return it
+//         case 'F': case 'L': case 'R': case 'C': case 'U':
+//         case 'f': case 'l': case 'r': case 'c': case 'u':
+//           return((char) ch );
+//        }
+//      }
+//    }
+//    catch (IOException e) {
+//      System.out.println ("IO error:" + e );
+//    }
+//
+//    return 0;
+	  
+	  
+	 char ch = this.aiAction.makeMove();
+	 switch( ch ) { // if character is a valid action, return it
+	 	case 'F': case 'L': case 'R': case 'C': case 'U':
+	 	case 'f': case 'l': case 'r': case 'c': case 'u':
+	 		return((char) ch );
+	 }
+	  return 0;
   }
 
   void print_view( char view[][] )
@@ -73,6 +94,7 @@ public class Agent {
     int ch;
     int i,j;
     AgentState agentState = new AgentState();
+    agent.setAiAction(new AiAction(agentState));
     ViewedMap updateView = new ViewedMap(agentState);
     Search search = new Search();
     if( args.length < 2 ) {
@@ -115,29 +137,28 @@ public class Agent {
         updateView.printViewedMap(agentState.getViewedMap());
         updateView.printAgentDetail();
         // test to get the key
-        Item key = agentState.getKeyList().getFirst();
-        int keyRow = key.getRow();
-        int keyCol = key.getCol();
-        LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
-        			keyRow, keyCol, agentState.getViewedMap(), agentState.getDirection());
-        for(Character ch2: actions) {
-        		System.out.println(ch2);
-        		
-        		out.write( ch2 );
-        		try        
-        		{
-        		    Thread.sleep(1000);
-        		} 
-        		catch(InterruptedException ex) 
-        		{
-        		    Thread.currentThread().interrupt();
-        		}
+//        Item key = agentState.getKeyList().getFirst();
+//        int keyRow = key.getRow();
+//        int keyCol = key.getCol();
+        LinkedList<Character> actions = search.AstarSearch(40, 40, 
+   			40, 40, agentState.getViewedMap(), agentState.getDirection());
+        for(Character c: actions) {
+        		System.out.println(c);
         }
         
-        //action = agent.get_action( view );
+        action = agent.get_action( view);
+	    	System.out.println(action);
+	    	out.write( action );
+	    	try        
+	    	{
+	    		Thread.sleep(200);
+	    	} 
+	    	catch(InterruptedException ex) 
+	    	{
+	    		Thread.currentThread().interrupt();
+	    	}
         updateView.updateAgentDetail(action);
         //out.write( action );
-        return;
       }
     }
     catch( IOException e ) {

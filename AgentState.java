@@ -20,7 +20,7 @@ public class AgentState {
 	private LinkedList<Item> DoorList         = new LinkedList<Item>();
 	private LinkedList<Item> TreasureList   = new LinkedList<Item>();
 	private LinkedList<Coordinate> ViewedPlace = new LinkedList<Coordinate>();
-	private LinkedList<Coordinate> pendingMove = new LinkedList<Coordinate>();
+	private LinkedList<Character> pendingMove = new LinkedList<Character>();
 	private LinkedList<Item> exploreView = new LinkedList<Item>();
 	private char viewedMap[][] = new char[80][80];
 	private int startCol = viewedMap.length/2;
@@ -175,12 +175,12 @@ public class AgentState {
 	}
 
 
-	public LinkedList<Coordinate> getPendingMove() {
+	public LinkedList<Character> getPendingMove() {
 		return pendingMove;
 	}
 
 
-	public void setPendingMove(LinkedList<Coordinate> pendingMove) {
+	public void setPendingMove(LinkedList<Character> pendingMove) {
 		this.pendingMove = pendingMove;
 	}
 

@@ -143,14 +143,27 @@ public class Search {
 		startPoint.setgCost(0);
 		startPoint.sethCost(0);
 		LinkedList<PointState> queue = new LinkedList<PointState>();
+		LinkedList<PointState> viewed = new LinkedList<PointState>();
+		LinkedList<PointState> toAdd = new LinkedList<PointState>();
 		queue.add(startPoint);
 		while(!queue.isEmpty()) {
 			PointState curr = priorityQueue(queue);
+			queue.remove(curr);
+			int exist1 = 0;
+			for(PointState a: viewed) {
+				if(curr.getCurRow() == a.getCurRow() && curr.getCurCol() == a.getCurCol()) {
+					exist1 = 1;
+					continue;
+				}
+			}
+			if(exist1 == 0) {
+				viewed.add(curr);
+			}
 			System.out.println("this point row: " + curr.getCurRow() + " this point Col: " + curr.getCurCol());
 			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
 				return curr.getActions();
 			} else {
-				LinkedList<PointState> toAdd = new LinkedList<PointState>();
+				toAdd.removeAll(toAdd);
 				//check it is in map
 				//north
 				if(curr.getCurRow()-1 >= 0) {
@@ -159,6 +172,9 @@ public class Search {
 							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
 							toAdd.add(northPoint);
 							makeDirection(curr, northPoint, NORTH);
+							break;
+						default:
+							break;
 					}
 					
 				}
@@ -169,34 +185,51 @@ public class Search {
 							PointState eastPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
 							toAdd.add(eastPoint);
 							makeDirection(curr, eastPoint, EAST);
+							break;
+						default:
+							break;
 					}		
 				}
 				//south
 				if(curr.getCurRow()+1 < board) {
 					switch(viewedMap[curr.getCurRow()+1][curr.getCurCol()]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState southPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
+							PointState southPoint = new PointState(curr.getCurRow()+1,curr.getCurCol(),new LinkedList<Character>());
 							toAdd.add(southPoint);
 							makeDirection(curr, southPoint, SOUTH);
+							break;
+						default:
+							break;
 					}
 				}
 				//west
 				if(curr.getCurCol()-1 >= 0) {
 					switch(viewedMap[curr.getCurRow()][curr.getCurCol()-1]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
+							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
 							toAdd.add(westPoint);
 							makeDirection(curr, westPoint, WEST);
+							break;
+						default:
+							break;
 					}
 				}
 				for(PointState addEle: toAdd) {
-					addEle.setgCost(Math.sqrt(Math.pow(endRow-addEle.getCurRow(), 2) + Math.pow(endCol-addEle.getCurCol(), 2)));
-					addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
-					addEle.setfCost(addEle.getgCost()+addEle.gethCost());
-					queue.add(addEle);
+					int add = 1;
+					for(PointState check: viewed) {
+						if(addEle.getCurRow() == check.getCurRow() && addEle.getCurCol() == check.getCurCol()) {
+							add = 0;
+						}
+					}
+					if(add == 1) {
+						addEle.setgCost(Math.sqrt(Math.pow(endRow-addEle.getCurRow(), 2) + Math.pow(endCol-addEle.getCurCol(), 2)));
+						addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
+						addEle.setfCost(addEle.getgCost());
+						queue.add(addEle);
+					}
 				}
 			}
-			queue.remove(curr);
+			
 		}
 		System.out.println("Fail!!!!!!!!!!!!!");
 		LinkedList<Character> fail = new LinkedList<Character>();
