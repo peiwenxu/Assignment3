@@ -199,7 +199,7 @@ public class AiAction {
 	
 	
 	public Character makeMove() {
-		Search search = new Search();
+		Search search = new Search(this.agentState);
 		if(!agentState.getPendingMove().isEmpty()) {
 			char ch = doAction();
 			agentState.getPendingMove().removeFirst();
@@ -230,23 +230,31 @@ public class AiAction {
 				//check if we can get
 				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
 	        			goldRow, goldCol, agentState.getViewedMap(), agentState.getDirection());
+				System.out.println(actions.getFirst());
 				if(actions.getFirst() != '?') {
-					//check if we can back to startPoint
-					int afterDir = predictDirection(agentState.getDirection(),actions);
-					LinkedList<Character> actions2 = search.AstarSearch(goldRow, goldCol, 
-		        			agentState.getStartRow(), agentState.getStartCol(), agentState.getViewedMap(),afterDir);
-					if(actions2.getFirst() != '?') {
-						//We can get gold and back
-						for(Character action: actions) {
-							agentState.getPendingMove().add(action);
-						}
-						for(Character action: actions2) {
-							agentState.getPendingMove().add(action);
-						}
-						char ch = doAction();
-						agentState.getPendingMove().removeFirst();
-						return ch;
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
 					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
+					return ch;
+					
+//					//check if we can back to startPoint
+//					int afterDir = predictDirection(agentState.getDirection(),actions);
+//					LinkedList<Character> actions2 = search.AstarSearch(goldRow, goldCol, 
+//		        			agentState.getStartRow(), agentState.getStartCol(), agentState.getViewedMap(),afterDir);
+//					if(actions2.getFirst() != '?') {
+//						//We can get gold and back
+//						for(Character action: actions) {
+//							agentState.getPendingMove().add(action);
+//						}
+//						for(Character action: actions2) {
+//							agentState.getPendingMove().add(action);
+//						}
+//						char ch = doAction();
+//						agentState.getPendingMove().removeFirst();
+//						return ch;
+//					}
 				}
 			}
 			//we dont have treasure and we need to explore map
@@ -290,20 +298,60 @@ public class AiAction {
 							return ch;
 						} else {
 							splitPoint(togo);
-							char ch = this.makeMove();
-							return ch;
+							continue;
 						}
 					} else {
 						splitPoint(togo);
-						char ch = this.makeMove();
-						return ch;
+						continue;
 					}
 				} else {
-					char ch = this.makeMove();
+					continue;
+				}
+			}
+			//we dont have treasure but we can see all the view then we pick up key and axe if we can go
+			//get all the keys
+			if(!agentState.getKeyList().isEmpty()) {
+				int keyRow = 0;
+				int keyCol = 0;
+				for(Item key: agentState.getKeyList()) {
+					keyRow = key.getRow();
+					keyCol = key.getCol();
+				}
+				//check we can get
+				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+	        			keyRow, keyCol, agentState.getViewedMap(), agentState.getDirection());
+				if(actions.getFirst() != '?') {
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
+					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
 					return ch;
 				}
 			}
+			//get all the axe that we can get
+			if(!agentState.getAxeList().isEmpty()) {
+				int axeRow = 0;
+				int axeCol = 0;
+				for(Item axe: agentState.getAxeList()) {
+					axeRow = axe.getRow();
+					axeCol = axe.getCol();
+				}
+				//check we can get
+				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+	        			axeRow, axeCol, agentState.getViewedMap(), agentState.getDirection());
+				if(actions.getFirst() != '?') {
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
+					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
+					return ch;
+				}
+			}
+			
 		}
+		
 		
 		return 0;
 	}

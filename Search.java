@@ -5,10 +5,10 @@ public class Search {
 	final static int NORTH  						 = 1;
 	final static int WEST 					          = 2;
 	final static int SOUTH  					   	 = 3;
+	private AgentState agentState;
 	
-	
-	Search() {
-		
+	Search(AgentState agentState) {
+		this.agentState = agentState;
 	}
 	  
 	
@@ -132,6 +132,133 @@ public class Search {
 		}
 	}
 	
+	public void unlock_chop(PointState prePoint, PointState curPoint, int position, char action) {
+		int preDir = prePoint.getDirection();
+		//copy the action into new point
+		for(Character ch: prePoint.getActions()) {
+			curPoint.getActions().add(ch);
+		}
+		if(preDir == NORTH) {
+			switch(position) {
+			case NORTH:
+				curPoint.getActions().add(action);
+				curPoint.getActions().add('f');
+				curPoint.setDirection(NORTH);
+				break;
+			case EAST:
+				curPoint.getActions().add('r');
+				curPoint.getActions().add(action);
+				curPoint.getActions().add('f');
+				curPoint.setDirection(EAST);
+				break;
+			case SOUTH:
+				curPoint.getActions().add('r');
+				curPoint.getActions().add('r');
+				curPoint.getActions().add(action);
+				curPoint.getActions().add('f');
+				curPoint.setDirection(SOUTH);
+				break;
+			case WEST:
+				curPoint.getActions().add('l');
+				curPoint.getActions().add(action);
+				curPoint.getActions().add('f');
+				curPoint.setDirection(WEST);
+				break;
+			}
+		} else if(preDir == EAST) {
+			switch(position) {
+				case NORTH:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(NORTH);
+					break;
+				case EAST:
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(EAST);
+					break;
+				case SOUTH:
+					curPoint.getActions().add('r');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(SOUTH);
+					break;
+				case WEST:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(WEST);
+					break;
+			}
+		} else if(preDir == SOUTH) {
+			switch(position) {
+				case NORTH:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(NORTH);
+					break;
+				case EAST:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(EAST);
+					break;
+				case SOUTH:
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(SOUTH);
+					break;
+				case WEST:
+					curPoint.getActions().add('r');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(WEST);
+					break;
+			}
+		} else if(preDir == WEST) {
+			switch(position) {
+				case NORTH:
+					curPoint.getActions().add('r');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(NORTH);
+					break;
+				case EAST:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(EAST);
+					break;
+				case SOUTH:
+					curPoint.getActions().add('l');
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(SOUTH);
+					break;
+				case WEST:
+					curPoint.getActions().add(action);
+					curPoint.getActions().add('f');
+					curPoint.setDirection(WEST);
+					break;
+			}
+		}
+		int curRow = curPoint.getCurRow();
+		int curCol = curPoint.getCurCol();
+		Item topRight = new Item(curRow-2,curCol+2,"tr");
+		Item topLeft = new Item(curRow-2,curCol-2,"tl");
+		Item bottomRight = new Item(curRow+2,curCol+2,"br");
+		Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+		this.agentState.getExploreView().add(topRight);
+		this.agentState.getExploreView().add(topLeft);
+		this.agentState.getExploreView().add(bottomLeft);
+		this.agentState.getExploreView().add(bottomRight);
+	}
+	
 	
 	
 	public LinkedList<Character> AstarSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
@@ -153,11 +280,13 @@ public class Search {
 			for(PointState a: viewed) {
 				if(curr.getCurRow() == a.getCurRow() && curr.getCurCol() == a.getCurCol()) {
 					exist1 = 1;
-					continue;
+					break;
 				}
 			}
 			if(exist1 == 0) {
 				viewed.add(curr);
+			} else {
+				continue;
 			}
 			System.out.println("this point row: " + curr.getCurRow() + " this point Col: " + curr.getCurCol());
 			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
@@ -169,9 +298,19 @@ public class Search {
 				if(curr.getCurRow()-1 >= 0) {
 					switch(viewedMap[curr.getCurRow()-1][curr.getCurCol()]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
+							System.out.println("add hee");
 							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
 							toAdd.add(northPoint);
 							makeDirection(curr, northPoint, NORTH);
+							break;
+						case '-':
+							System.out.println("adding this point");
+							System.out.println(agentState.isHave_key());
+							if(agentState.isHave_key() == true) {
+								PointState northPoint2 = new PointState(curr.getCurRow()-1,curr.getCurCol(), new LinkedList<Character>());
+								toAdd.add(northPoint2);
+								unlock_chop(curr, northPoint2, NORTH,'u');
+							}
 							break;
 						default:
 							break;
@@ -186,6 +325,13 @@ public class Search {
 							toAdd.add(eastPoint);
 							makeDirection(curr, eastPoint, EAST);
 							break;
+						case '-':
+							if(agentState.isHave_key() == true) {
+								PointState east2Point = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
+								toAdd.add(east2Point);
+								unlock_chop(curr, east2Point, EAST,'u');
+							}
+							break;
 						default:
 							break;
 					}		
@@ -198,6 +344,13 @@ public class Search {
 							toAdd.add(southPoint);
 							makeDirection(curr, southPoint, SOUTH);
 							break;
+						case '-':
+							if(agentState.isHave_key() == true) {
+								PointState south2Point = new PointState(curr.getCurRow()+1,curr.getCurCol(),new LinkedList<Character>());
+								toAdd.add(south2Point);
+								unlock_chop(curr, south2Point, SOUTH,'u');
+							}
+							break;
 						default:
 							break;
 					}
@@ -209,6 +362,13 @@ public class Search {
 							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
 							toAdd.add(westPoint);
 							makeDirection(curr, westPoint, WEST);
+							break;
+						case '-':
+							if(agentState.isHave_key() == true) {
+								PointState west2Point = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
+								toAdd.add(west2Point);
+								unlock_chop(curr, west2Point, WEST,'u');
+							}
 							break;
 						default:
 							break;

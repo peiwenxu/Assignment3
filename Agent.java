@@ -52,7 +52,6 @@ public char get_action( char[][] view ) {
 //
 //    return 0;
 	  
-	  
 	 char ch = this.aiAction.makeMove();
 	 switch( ch ) { // if character is a valid action, return it
 	 	case 'F': case 'L': case 'R': case 'C': case 'U':
@@ -96,7 +95,7 @@ public char get_action( char[][] view ) {
     AgentState agentState = new AgentState();
     agent.setAiAction(new AiAction(agentState));
     ViewedMap updateView = new ViewedMap(agentState);
-    Search search = new Search();
+    Search search = new Search(agentState);
     if( args.length < 2 ) {
       System.out.println("Usage: java Agent -p <port>\n");
       System.exit(-1);
@@ -140,12 +139,16 @@ public char get_action( char[][] view ) {
 //        Item key = agentState.getKeyList().getFirst();
 //        int keyRow = key.getRow();
 //        int keyCol = key.getCol();
-        LinkedList<Character> actions = search.AstarSearch(40, 40, 
-   			40, 40, agentState.getViewedMap(), agentState.getDirection());
-        for(Character c: actions) {
-        		System.out.println(c);
-        }
-        
+//        AiAction ai = new AiAction(agentState);
+//        agentState.setHave_treasure(false);
+//        char ch2 = ai.makeMove();
+//        System.out.println("The move: " + ch2);
+//        LinkedList<Character> actions = search.AstarSearch(40, 40, 
+//   			38, 40, agentState.getViewedMap(), agentState.getDirection());
+//        for(Character c: actions) {
+//        		System.out.println(c);
+//        }
+////        
         action = agent.get_action( view);
 	    	System.out.println(action);
 	    	out.write( action );

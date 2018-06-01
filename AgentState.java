@@ -28,6 +28,8 @@ public class AgentState {
 	private int curRow = startRow;
 	private int curCol = startCol;
 	private int direction = NORTH;
+	private boolean needkey = false;
+	private boolean needaxe = false;
 	
 	
 	public AgentState() {
