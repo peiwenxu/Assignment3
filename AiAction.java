@@ -349,7 +349,25 @@ public class AiAction {
 					return ch;
 				}
 			}
-			
+			//open the door for explore map if we cant do anything
+			if(!agentState.getDoorList().isEmpty()) {
+				int doorRow = 0;
+				int doorCol = 0;
+				for(Item door: agentState.getDoorList()) {
+					doorRow = door.getRow();
+					doorCol = door.getCol();
+				}
+				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+	        			doorRow, doorCol, agentState.getViewedMap(), agentState.getDirection());
+				if(actions.getFirst() != '?') {
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
+					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
+					return ch;
+				}
+			}
 		}
 		
 		
