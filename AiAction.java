@@ -91,6 +91,9 @@ public class AiAction {
 			return false;
 		}
 		
+		
+		
+		
 		int viewedNum = 0;
 		int startRow = thisPoint.getRow()-2;
 		int startCol = thisPoint.getCol()-2;
@@ -104,7 +107,6 @@ public class AiAction {
 					}
 				}
 			}
-			
 		}
 		System.out.println("this point have see " + viewedNum);
 		if(viewedNum == 25) {
@@ -200,6 +202,10 @@ public class AiAction {
 	
 	public Character makeMove() {
 		Search search = new Search(this.agentState);
+
+		
+		
+		
 		if(!agentState.getPendingMove().isEmpty()) {
 			char ch = doAction();
 			agentState.getPendingMove().removeFirst();
@@ -225,6 +231,7 @@ public class AiAction {
 			
 			//if we see gold
 			if(!agentState.getTreasureList().isEmpty()) {
+				System.out.println("go to gold");
 				int goldRow = agentState.getTreasureList().getFirst().getRow();
 				int goldCol = agentState.getTreasureList().getFirst().getCol();
 				//check if we can get
@@ -368,6 +375,27 @@ public class AiAction {
 					return ch;
 				}
 			}
+			
+			if(!agentState.getTreeList().isEmpty()) {
+				System.out.println("we here####");
+				int treeRow = 0;
+				int treeCol = 0;
+				for(Item tree: agentState.getTreeList()) {
+					treeRow = tree.getRow();
+					treeCol = tree.getCol();
+				}
+				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+	        			treeRow, treeCol, agentState.getViewedMap(), agentState.getDirection());
+				if(actions.getFirst() != '?') {
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
+					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
+					return ch;
+				}
+			}
+			
 		}
 		
 		

@@ -247,22 +247,13 @@ public class Search {
 					break;
 			}
 		}
-		int curRow = curPoint.getCurRow();
-		int curCol = curPoint.getCurCol();
-		Item topRight = new Item(curRow-2,curCol+2,"tr");
-		Item topLeft = new Item(curRow-2,curCol-2,"tl");
-		Item bottomRight = new Item(curRow+2,curCol+2,"br");
-		Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
-		this.agentState.getExploreView().add(topRight);
-		this.agentState.getExploreView().add(topLeft);
-		this.agentState.getExploreView().add(bottomLeft);
-		this.agentState.getExploreView().add(bottomRight);
 	}
 	
 	
 	
 	public LinkedList<Character> AstarSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
 		System.out.println("utututu");
+		System.out.println("we want to go to " + endRow + " " + endCol);
 		int board = viewedMap.length;
 		PointState startPoint = new PointState(startRow, startCol, new LinkedList<Character>());
 		startPoint.setDirection(curDirection);
@@ -313,7 +304,6 @@ public class Search {
 							}
 							break;
 						case 'T':
-							System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
 								PointState northPoint2 = new PointState(curr.getCurRow()-1,curr.getCurCol(), new LinkedList<Character>());
@@ -342,10 +332,11 @@ public class Search {
 							}
 							break;
 						case 'T':
+							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
-								PointState east2Point = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
-								toAdd.add(east2Point);
-								unlock_chop(curr, east2Point, EAST,'c');
+								PointState eastPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()+1, new LinkedList<Character>());
+								toAdd.add(eastPoint2);
+								unlock_chop(curr, eastPoint2, EAST,'c');
 							}
 							break;
 						default:
@@ -368,10 +359,11 @@ public class Search {
 							}
 							break;
 						case 'T':
+							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
-								PointState south2Point = new PointState(curr.getCurRow()+1,curr.getCurCol(),new LinkedList<Character>());
-								toAdd.add(south2Point);
-								unlock_chop(curr, south2Point, SOUTH,'c');
+								PointState southPoint2 = new PointState(curr.getCurRow()+1,curr.getCurCol(), new LinkedList<Character>());
+								toAdd.add(southPoint2);
+								unlock_chop(curr, southPoint2, SOUTH,'c');
 							}
 							break;
 						default:
@@ -394,10 +386,11 @@ public class Search {
 							}
 							break;
 						case 'T':
-							if(agentState.isHave_key() == true) {
-								PointState west2Point = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
-								toAdd.add(west2Point);
-								unlock_chop(curr, west2Point, WEST,'c');
+							System.out.println(agentState.isHave_axe());
+							if(agentState.isHave_axe() == true) {
+								PointState westPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()-1, new LinkedList<Character>());
+								toAdd.add(westPoint2);
+								unlock_chop(curr, westPoint2, WEST,'c');
 							}
 							break;
 						default:
@@ -416,6 +409,7 @@ public class Search {
 						addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
 						addEle.setfCost(addEle.getgCost());
 						queue.add(addEle);
+						System.out.println(addEle.getCurRow()+" " + addEle.getCurCol() + " added");
 					}
 				}
 			}

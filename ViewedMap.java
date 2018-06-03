@@ -457,6 +457,29 @@ public class ViewedMap {
 	    		Boolean isChopOrUnlock = updateView.chop_unlock(agentState.getDirection(), agentState, action, agentState.getViewedMap(),agentState.getCurRow(), agentState.getCurCol());
 	    		if(isChopOrUnlock == true) {
 	    			updateList.remove_chop_unlock(agentState.getCurRow(),agentState.getCurCol(),action,agentState.getDirection());
+	    			int curRow = -1;
+	    			int curCol = -1;
+	    			if(agentState.getDirection() == NORTH) {
+	    				curRow = agentState.getCurRow()-1;
+	    				curCol = agentState.getCurCol();
+	    			} else if (agentState.getDirection() == EAST) {
+	    				curRow = agentState.getCurRow();
+	    				curCol = agentState.getCurCol()+1;
+	    			} else if(agentState.getDirection() == SOUTH) {
+	    				curRow = agentState.getCurRow()+1;
+	    				curCol = agentState.getCurCol();
+	    			} else if(agentState.getDirection() == WEST) {
+	    				curRow = agentState.getCurRow();
+	    				curCol = agentState.getCurCol()-1;
+	    			}
+	    			Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    			Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    			Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    			Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    			this.agentState.getExploreView().add(topRight);
+	    			this.agentState.getExploreView().add(topLeft);
+	    			this.agentState.getExploreView().add(bottomLeft);
+	    			this.agentState.getExploreView().add(bottomRight);
 	    		}
 	    	}
 	}
