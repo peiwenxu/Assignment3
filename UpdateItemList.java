@@ -49,6 +49,13 @@ public class UpdateItemList {
 					break;
 				}
 			}
+		} else if(Item == '~' ) {
+			for(Item e:agentState.getWaterList()) {
+				if(e.getRow() == curRow && e.getCol() == curCol) {
+					agentState.getWaterList().remove(e);
+					break;
+				}
+			}
 		}
 	}
 	

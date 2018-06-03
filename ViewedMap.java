@@ -93,8 +93,15 @@ public class ViewedMap {
 			if(dire == NORTH) {
 				int startRow = currentRow-2;
 				int startCol = currentCol-2;
-				viewedMap[currentRow+1][currentCol] = ' ';
-				viewedMap[currentRow][currentCol] = '^';
+				if(agentState.isOn_raft() == false) {
+					viewedMap[currentRow+1][currentCol] = ' ';
+					viewedMap[currentRow][currentCol] = '^';
+				} else if(agentState.isOn_raft() == true){
+					viewedMap[currentRow+1][currentCol] = '~';
+					viewedMap[currentRow][currentCol] = '^';
+				}
+				
+				
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol] = inView[0][i];
 					collectItem(inView,0,i,startRow,startCol);
@@ -103,8 +110,13 @@ public class ViewedMap {
 			} else if (dire == SOUTH) {
 				int startRow = currentRow+2;
 				int startCol = currentCol+2;
-				viewedMap[currentRow-1][currentCol] = ' ';
-				viewedMap[currentRow][currentCol] = 'v';
+				if(agentState.isOn_raft() == false) {
+					viewedMap[currentRow-1][currentCol] = ' ';
+					viewedMap[currentRow][currentCol] = 'v';
+				} else if(agentState.isOn_raft() == true) {
+					viewedMap[currentRow-1][currentCol] = '~';
+					viewedMap[currentRow][currentCol] = 'v';
+				}
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol] = inView[0][i];
 					collectItem(inView,0,i,startRow,startCol);
@@ -113,8 +125,14 @@ public class ViewedMap {
 			} else if(dire == EAST) {
 				int startRow = currentRow-2;
 				int startCol = currentCol+2;
-				viewedMap[currentRow][currentCol-1] = ' ';
-				viewedMap[currentRow][currentCol] = '>';
+				if(agentState.isOn_raft() == false) {
+					viewedMap[currentRow][currentCol-1] = ' ';
+					viewedMap[currentRow][currentCol] = '>';
+				} else if(agentState.isOn_raft() == true){
+					viewedMap[currentRow][currentCol-1] = '~';
+					viewedMap[currentRow][currentCol] = '>';
+				}
+				
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol] = inView[0][i];
 					collectItem(inView,0,i,startRow,startCol);
@@ -123,8 +141,13 @@ public class ViewedMap {
 			} else if(dire == WEST) {
 				int startRow = currentRow+2;
 				int startCol = currentCol-2;
-				viewedMap[currentRow][currentCol+1] = ' ';
-				viewedMap[currentRow][currentCol] = '<';
+				if(agentState.isOn_raft() == false) {
+					viewedMap[currentRow][currentCol+1] = ' ';
+					viewedMap[currentRow][currentCol] = '<';
+				} else if(agentState.isOn_raft() == true) {
+					viewedMap[currentRow][currentCol+1] = '~';
+					viewedMap[currentRow][currentCol] = '<';
+				}
 				for(int i = 0; i < 5; i++) {
 					viewedMap[startRow][startCol] = inView[0][i];
 					collectItem(inView,0,i,startRow,startCol);
@@ -270,6 +293,18 @@ public class ViewedMap {
 				Item Treasure = new Item(viewRow,viewCol,"Treasure");
 				this.agentState.getTreasureList().add(Treasure);
 			}
+		} else if(inView[row][col] == '~'){
+			int exist = 0;
+			for(int i = 0; i < this.agentState.getWaterList().size(); i++) {
+				if(this.agentState.getWaterList().get(i).getRow() == viewRow &&
+						this.agentState.getWaterList().get(i).getCol() == viewCol) {
+					exist = 1;
+				}
+			}
+			if(exist == 0) {
+				Item Water = new Item(viewRow,viewCol,"Water");
+				this.agentState.getWaterList().add(Water);
+			}
 		}
 	}
 	
@@ -353,6 +388,38 @@ public class ViewedMap {
 	    					agentState.setCurRow(agentState.getCurRow()-1);
 	    					updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'o');
 	    					break;
+	    				case '~':
+	    					int stone = agentState.getNum_stones_held();
+	    					if(stone > 0) {
+	    						agentState.setNum_stones_held(agentState.getNum_stones_held()-1);
+	    						agentState.setCurRow(agentState.getCurRow()-1);
+	    						updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'~');
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getExploreView().add(topRight);
+	    		    				this.agentState.getExploreView().add(topLeft);
+	    		    				this.agentState.getExploreView().add(bottomLeft);
+	    		    				this.agentState.getExploreView().add(bottomRight);
+	    					} else {
+	    						agentState.setOn_raft(true);
+	    						agentState.setHave_raft(false);
+	    						agentState.setCurRow(agentState.getCurRow()-1);
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getWaterExplore().add(topRight);
+	    		    				this.agentState.getWaterExplore().add(topLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomRight);
+	    					}
+	    					break;
 	    				default:
 	    					agentState.setCurRow(agentState.getCurRow()-1);
 	    					break;
@@ -380,6 +447,38 @@ public class ViewedMap {
 	    					agentState.setNum_stones_held(agentState.getNum_stones_held()+1);
 	    					agentState.setCurRow(agentState.getCurRow()+1);
 	    					updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'o');
+	    					break;
+	    				case '~':
+	    					int stone = agentState.getNum_stones_held();
+	    					if(stone > 0) {
+	    						agentState.setNum_stones_held(agentState.getNum_stones_held()-1);
+	    						agentState.setCurRow(agentState.getCurRow()+1);
+	    						updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'~');
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getExploreView().add(topRight);
+	    		    				this.agentState.getExploreView().add(topLeft);
+	    		    				this.agentState.getExploreView().add(bottomLeft);
+	    		    				this.agentState.getExploreView().add(bottomRight);
+	    					} else {
+	    						agentState.setOn_raft(true);
+	    						agentState.setHave_raft(false);
+	    						agentState.setCurRow(agentState.getCurRow()+1);
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getWaterExplore().add(topRight);
+	    		    				this.agentState.getWaterExplore().add(topLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomRight);
+	    					}
 	    					break;
 					default:
 						agentState.setCurRow(agentState.getCurRow()+1);
@@ -409,6 +508,38 @@ public class ViewedMap {
 	    					agentState.setCurCol(agentState.getCurCol()+1);
 	    					updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'o');
 	    					break;
+	    				case '~':
+	    					int stone = agentState.getNum_stones_held();
+	    					if(stone > 0) {
+	    						agentState.setNum_stones_held(agentState.getNum_stones_held()-1);
+	    						agentState.setCurRow(agentState.getCurCol()+1);
+	    						updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'~');
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getExploreView().add(topRight);
+	    		    				this.agentState.getExploreView().add(topLeft);
+	    		    				this.agentState.getExploreView().add(bottomLeft);
+	    		    				this.agentState.getExploreView().add(bottomRight);
+	    					} else {
+	    						agentState.setOn_raft(true);
+	    						agentState.setHave_raft(false);
+	    						agentState.setCurRow(agentState.getCurCol()+1);
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getWaterExplore().add(topRight);
+	    		    				this.agentState.getWaterExplore().add(topLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomRight);
+	    					}
+	    					break;
 					default:
 						agentState.setCurCol(agentState.getCurCol()+1);
 						break;
@@ -436,6 +567,38 @@ public class ViewedMap {
 	    					agentState.setNum_stones_held(agentState.getNum_stones_held()+1);
 	    					agentState.setCurCol(agentState.getCurCol()-1);
 	    					updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'o');
+	    					break;
+	    				case '~':
+	    					int stone = agentState.getNum_stones_held();
+	    					if(stone > 0) {
+	    						agentState.setNum_stones_held(agentState.getNum_stones_held()-1);
+	    						agentState.setCurRow(agentState.getCurCol()-1);
+	    						updateList.Update(agentState.getCurRow(),agentState.getCurCol(),'~');
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getExploreView().add(topRight);
+	    		    				this.agentState.getExploreView().add(topLeft);
+	    		    				this.agentState.getExploreView().add(bottomLeft);
+	    		    				this.agentState.getExploreView().add(bottomRight);
+	    					} else {
+	    						agentState.setOn_raft(true);
+	    						agentState.setHave_raft(false);
+	    						agentState.setCurRow(agentState.getCurCol()-1);
+	    						int curRow = agentState.getCurRow();
+	    						int curCol = agentState.getCurCol();
+	    						Item topRight = new Item(curRow-2,curCol+2,"tr");
+	    		    				Item topLeft = new Item(curRow-2,curCol-2,"tl");
+	    		    				Item bottomRight = new Item(curRow+2,curCol+2,"br");
+	    		    				Item bottomLeft = new Item(curRow+2,curCol-2,"bl");
+	    		    				this.agentState.getWaterExplore().add(topRight);
+	    		    				this.agentState.getWaterExplore().add(topLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomLeft);
+	    		    				this.agentState.getWaterExplore().add(bottomRight);
+	    					}
 	    					break;
 					default:
 						agentState.setCurCol(agentState.getCurCol()-1);

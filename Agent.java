@@ -152,15 +152,18 @@ public char get_action( char[][] view ) {
         action = agent.get_action( view);
 	    	System.out.println(action);
 	    	out.write( action );
-	    	try        
-	    	{
-	    		Thread.sleep(200);
-	    	} 
-	    	catch(InterruptedException ex) 
-	    	{
-	    		Thread.currentThread().interrupt();
-	    	}
+//	    	try        
+//	    	{
+//	    		Thread.sleep(200);
+//	    	} 
+//	    	catch(InterruptedException ex) 
+//	    	{
+//	    		Thread.currentThread().interrupt();
+//	    	}
         updateView.updateAgentDetail(action);
+//        for(Item e: agentState.getExploreView()) {
+//        		System.out.println("Row: " + e.getRow() + "Col: " + e.getCol());
+//        }
         //out.write( action );
       }
     }

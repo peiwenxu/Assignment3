@@ -94,24 +94,24 @@ public class AiAction {
 		
 		
 		
-		int viewedNum = 0;
-		int startRow = thisPoint.getRow()-2;
-		int startCol = thisPoint.getCol()-2;
-		for(int i = startRow; i < startRow + 5; i++) {
-			if(i < board) {
-				for(int i2 = startCol; i2 < startCol + 5; i2++) {
-					if(i2 < board) {
-						if(agentState.getViewedMap()[i][i2] != 0) {
-							viewedNum++;
-						}
-					}
-				}
-			}
-		}
-		System.out.println("this point have see " + viewedNum);
-		if(viewedNum == 25) {
-			return false;
-		}
+//		int viewedNum = 0;
+//		int startRow = thisPoint.getRow()-2;
+//		int startCol = thisPoint.getCol()-2;
+//		for(int i = startRow; i < startRow + 5; i++) {
+//			if(i < board) {
+//				for(int i2 = startCol; i2 < startCol + 5; i2++) {
+//					if(i2 < board) {
+//						if(agentState.getViewedMap()[i][i2] != 0) {
+//							viewedNum++;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		System.out.println("this point have see " + viewedNum);
+//		if(viewedNum == 25) {
+//			return false;
+//		}
 		return true;
 	}
 	
@@ -157,8 +157,8 @@ public class AiAction {
 			agentState.getExploreView().add(add1);
 			agentState.getExploreView().add(add2);
 		} else if (togo.getName().equals("br2_1")) {
-			Item add1 = new Item(togo.getRow(),togo.getCol()-1,"br3_1");
-			Item add2 = new Item(togo.getRow()-1,togo.getCol(),"br3_2");
+			Item add1 = new Item(togo.getRow(),togo.getCol()-1,"br3_2");
+			Item add2 = new Item(togo.getRow()-1,togo.getCol(),"br3_1");
 			agentState.getExploreView().add(add1);
 			agentState.getExploreView().add(add2);
 		} else if (togo.getName().equals("br2_2")) {
@@ -230,7 +230,7 @@ public class AiAction {
 			}
 			
 			//if we see gold
-			if(!agentState.getTreasureList().isEmpty()) {
+			if(!agentState.getTreasureList().isEmpty() && agentState.isOn_raft() == false) {
 				System.out.println("go to gold");
 				int goldRow = agentState.getTreasureList().getFirst().getRow();
 				int goldCol = agentState.getTreasureList().getFirst().getCol();
@@ -265,7 +265,7 @@ public class AiAction {
 				}
 			}
 			//we dont have treasure and we need to explore map
-			if(!agentState.getExploreView().isEmpty()) {
+			if(!agentState.getExploreView().isEmpty() && agentState.isOn_raft() == false) {
 				System.out.println("we are here");
 				Item togo = agentState.getExploreView().removeLast();
 				System.out.println(togo.getName() + " " + togo.getRow() + " " + togo.getCol() + " ");
@@ -317,7 +317,7 @@ public class AiAction {
 			}
 			//we dont have treasure but we can see all the view then we pick up key and axe if we can go
 			//get all the keys
-			if(!agentState.getKeyList().isEmpty()) {
+			if(!agentState.getKeyList().isEmpty() && agentState.isOn_raft() == false) {
 				int keyRow = 0;
 				int keyCol = 0;
 				for(Item key: agentState.getKeyList()) {
@@ -337,7 +337,7 @@ public class AiAction {
 				}
 			}
 			//get all the axe that we can get
-			if(!agentState.getAxeList().isEmpty()) {
+			if(!agentState.getAxeList().isEmpty() && agentState.isOn_raft() == false) {
 				int axeRow = 0;
 				int axeCol = 0;
 				for(Item axe: agentState.getAxeList()) {
@@ -357,7 +357,7 @@ public class AiAction {
 				}
 			}
 			//open the door for explore map if we cant do anything
-			if(!agentState.getDoorList().isEmpty()) {
+			if(!agentState.getDoorList().isEmpty() && agentState.isOn_raft() == false) {
 				int doorRow = 0;
 				int doorCol = 0;
 				for(Item door: agentState.getDoorList()) {
@@ -375,7 +375,105 @@ public class AiAction {
 					return ch;
 				}
 			}
+			//get all the stone we can get
+			if(!agentState.getStoneList().isEmpty() && agentState.isOn_raft() == false) {
+				int stoneRow = 0;
+				int stoneCol = 0;
+				for(Item stone: agentState.getStoneList()) {
+					stoneRow = stone.getRow();
+					stoneCol = stone.getCol();
+				}
+				//check we can get
+				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+	        			stoneRow, stoneCol, agentState.getViewedMap(), agentState.getDirection());
+				if(actions.getFirst() != '?') {
+					for(Character action: actions) {
+						agentState.getPendingMove().add(action);
+					}
+					char ch = doAction();
+					agentState.getPendingMove().removeFirst();
+					return ch;
+				}
+			}
 			
+			
+			
+			
+			//use raft to explore map
+			if(agentState.isHave_raft() == true) {
+				System.out.println("go to water!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				int waterRow = -1;
+				int waterCol = -1;
+				for(Item water: agentState.getWaterList()) {
+					waterRow = water.getRow();
+					waterCol = water.getCol();
+					//check can go into that water
+					LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+							waterRow, waterCol, agentState.getViewedMap(), agentState.getDirection());
+					if(actions.getFirst() != '?') {
+						for(Character action: actions) {
+							agentState.getPendingMove().add(action);
+						}
+						char ch = doAction();
+						agentState.getPendingMove().removeFirst();
+						return ch;
+					} else {
+						continue;
+					}
+				}	
+			}
+			
+			//on_raft explore map
+			if(!agentState.getWaterExplore().isEmpty() && agentState.isOn_raft() == true) {
+				Item togo = agentState.getWaterExplore().removeLast();
+				if(needToGo(togo)) {
+					int cango = 1;
+					if(agentState.getViewedMap()[togo.getRow()][togo.getCol()] == '~') {
+						cango = 1;
+					} else {
+						cango = 0;
+					}
+					if(cango == 1) {
+						LinkedList<Character> actions = search.AstarSearchWater(agentState.getCurRow(), agentState.getCurCol(), 
+			        			togo.getRow(), togo.getCol(), agentState.getViewedMap(), agentState.getDirection());
+						if(actions.getFirst() == '?') {
+							cango = 0;
+						}
+						if(cango == 1) {
+							Item topRight = new Item(togo.getRow()-2,togo.getCol()+2,"tr");
+							Item topLeft = new Item(togo.getRow()-2,togo.getCol()-2,"tl");
+							Item bottomRight = new Item(togo.getRow()+2,togo.getCol()+2,"br");
+							Item bottomLeft = new Item(togo.getRow()+2,togo.getCol()-2,"bl");
+							this.agentState.getExploreView().add(topRight);
+							this.agentState.getExploreView().add(topLeft);
+							this.agentState.getExploreView().add(bottomLeft);
+							this.agentState.getExploreView().add(bottomRight);
+							for(Character action: actions) {
+								agentState.getPendingMove().add(action);
+							}
+							char ch = doAction();
+							agentState.getPendingMove().removeFirst();
+							return ch;
+						} else {
+							splitPoint(togo);
+							continue;
+						}
+					} else {
+						splitPoint(togo);
+						continue;
+					}
+				} else {
+					continue;
+				}
+			}
+
+			
+			
+			
+			
+			
+			
+			//cut all the tree if cant do anything
 			if(!agentState.getTreeList().isEmpty()) {
 				System.out.println("we here####");
 				int treeRow = 0;
@@ -396,6 +494,48 @@ public class AiAction {
 				}
 			}
 			
+			
+			for(int k = 0; k < agentState.getViewedMap().length; k++) {
+				for(int k2= 0; k2 < agentState.getViewedMap().length; k2++) {
+					 if(agentState.getViewedMap()[k][k2] == ' ' || agentState.getViewedMap()[k][k2] == 'k'
+							 || agentState.getViewedMap()[k][k2] == 'o' ||agentState.getViewedMap()[k][k2] == 'a') {
+						 int exist = 0;
+						 for(Coordinate e: agentState.getViewedPlace()) {
+							 if(e.getRow() == k && e.getCol() == k2) {
+								 exist = 1;
+							 }
+						 }
+						 if(exist == 0) {
+							 Item topRight = new Item(k-2,k2+2,"tr");
+							 Item topLeft = new Item(k-2,k2-2,"tl");
+							 Item bottomRight = new Item(k+2,k2+2,"br");
+							 Item bottomLeft = new Item(k+2,k2-2,"bl");
+							 Item it = new Item(k,k2,"hh");
+							 this.agentState.getExploreView().add(topRight);
+							 this.agentState.getExploreView().add(topLeft);
+							 this.agentState.getExploreView().add(bottomLeft);
+							 this.agentState.getExploreView().add(bottomRight);
+							 this.agentState.getExploreView().add(it);
+							 Coordinate it2 = new Coordinate(k,k2);
+							 this.agentState.getViewedPlace().add(it2);
+							 char ch = this.makeMove();
+							 return ch;
+						 }
+					 }
+				}
+			}
+			
+			
+			
+			//else we back to start point
+			LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
+        			agentState.getStartRow(), agentState.getStartCol(), agentState.getViewedMap(), agentState.getDirection());
+			for(Character action: actions) {
+				agentState.getPendingMove().add(action);
+			}
+			char ch = doAction();
+			agentState.getPendingMove().removeFirst();
+			return ch;
 		}
 		
 		

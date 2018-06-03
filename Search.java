@@ -252,6 +252,11 @@ public class Search {
 	
 	
 	public LinkedList<Character> AstarSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
+		int stone = agentState.getNum_stones_held();
+		if(agentState.isHave_raft() == true && stone == 0) {
+			stone = 9999;
+		}
+		
 		System.out.println("utututu");
 		System.out.println("we want to go to " + endRow + " " + endCol);
 		int board = viewedMap.length;
@@ -281,6 +286,16 @@ public class Search {
 			}
 			System.out.println("this point row: " + curr.getCurRow() + " this point Col: " + curr.getCurCol());
 			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
+				if(viewedMap[curr.getCurRow()][curr.getCurCol()] == '~') {
+					Item topRight = new Item(curr.getCurRow()-2,curr.getCurCol()+2,"tr");
+					Item topLeft = new Item(curr.getCurRow()-2,curr.getCurCol()-2,"tl");
+					Item bottomRight = new Item(curr.getCurRow()+2,curr.getCurCol()+2,"br");
+					Item bottomLeft = new Item(curr.getCurRow()+2,curr.getCurCol()-2,"bl");
+					this.agentState.getWaterExplore().add(topRight);
+					this.agentState.getWaterExplore().add(topLeft);
+					this.agentState.getWaterExplore().add(bottomLeft);
+					this.agentState.getWaterExplore().add(bottomRight);
+				}
 				return curr.getActions();
 			} else {
 				toAdd.removeAll(toAdd);
@@ -311,6 +326,13 @@ public class Search {
 								unlock_chop(curr, northPoint2, NORTH,'c');
 							}
 							break;
+						case '~':
+							if(curr.getCurRow()-1 == endRow && curr.getCurCol() == endCol) {
+								PointState north3Point = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
+								toAdd.add(north3Point);
+								makeDirection(curr, north3Point, NORTH);
+							}
+							break;
 						default:
 							break;
 					}
@@ -337,6 +359,13 @@ public class Search {
 								PointState eastPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()+1, new LinkedList<Character>());
 								toAdd.add(eastPoint2);
 								unlock_chop(curr, eastPoint2, EAST,'c');
+							}
+							break;
+						case '~':
+							if(curr.getCurRow() == endRow && curr.getCurCol()+1 == endCol) {
+								PointState east3Point = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
+								toAdd.add(east3Point);
+								makeDirection(curr, east3Point, EAST);
 							}
 							break;
 						default:
@@ -366,6 +395,13 @@ public class Search {
 								unlock_chop(curr, southPoint2, SOUTH,'c');
 							}
 							break;
+						case '~':
+							if(curr.getCurRow()+1 == endRow && curr.getCurCol() == endCol) {
+								PointState south3Point = new PointState(curr.getCurRow()+1,curr.getCurCol(),new LinkedList<Character>());
+								toAdd.add(south3Point);
+								makeDirection(curr, south3Point, SOUTH);
+							}
+							break;
 						default:
 							break;
 					}
@@ -391,6 +427,13 @@ public class Search {
 								PointState westPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()-1, new LinkedList<Character>());
 								toAdd.add(westPoint2);
 								unlock_chop(curr, westPoint2, WEST,'c');
+							}
+							break;
+						case '~':
+							if(curr.getCurRow() == endRow && curr.getCurCol()-1 == endCol) {
+								PointState west3Point = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
+								toAdd.add(west3Point);
+								makeDirection(curr, west3Point, WEST);
 							}
 							break;
 						default:
@@ -422,7 +465,106 @@ public class Search {
 	}
 	
 	
-	
-	
-	
+	public LinkedList<Character> AstarSearchWater(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
+		int board = viewedMap.length;
+		PointState startPoint = new PointState(startRow, startCol, new LinkedList<Character>());
+		startPoint.setDirection(curDirection);
+		startPoint.setfCost(0);
+		startPoint.setgCost(0);
+		startPoint.sethCost(0);
+		LinkedList<PointState> queue = new LinkedList<PointState>();
+		LinkedList<PointState> viewed = new LinkedList<PointState>();
+		LinkedList<PointState> toAdd = new LinkedList<PointState>();
+		queue.add(startPoint);
+		while(!queue.isEmpty()) {
+			PointState curr = priorityQueue(queue);
+			queue.remove(curr);
+			int exist1 = 0;
+			for(PointState a: viewed) {
+				if(curr.getCurRow() == a.getCurRow() && curr.getCurCol() == a.getCurCol()) {
+					exist1 = 1;
+					break;
+				}
+			}
+			if(exist1 == 0) {
+				viewed.add(curr);
+			} else {
+				continue;
+			}
+			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
+				return curr.getActions();
+			} else {
+				toAdd.removeAll(toAdd);
+				
+				//north
+				if(curr.getCurRow()-1 >= 0) {
+					switch(viewedMap[curr.getCurRow()-1][curr.getCurCol()]) {
+						case '~':
+							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
+							toAdd.add(northPoint);
+							makeDirection(curr, northPoint, NORTH);
+							break;
+						default:
+							break;
+					}
+				}
+				//east
+				if(curr.getCurCol()+1 < board) {
+					switch(viewedMap[curr.getCurRow()][curr.getCurCol()+1]) {
+						case '~':
+							PointState eastPoint = new PointState(curr.getCurRow(),curr.getCurCol()+1,new LinkedList<Character>());
+							toAdd.add(eastPoint);
+							makeDirection(curr, eastPoint, EAST);
+							break;
+						default:
+							break;
+					}
+				}
+				//south
+				if(curr.getCurRow()+1 < board) {
+					switch(viewedMap[curr.getCurRow()+1][curr.getCurCol()]) {
+						case '~':
+							PointState southPoint = new PointState(curr.getCurRow()+1,curr.getCurCol(),new LinkedList<Character>());
+							toAdd.add(southPoint);
+							makeDirection(curr, southPoint, SOUTH);
+							break;
+						default:
+							break;
+					}
+				}
+				//west
+				if(curr.getCurCol()-1 >= 0) {
+					switch(viewedMap[curr.getCurRow()][curr.getCurCol()-1]) {
+						case '~':
+							PointState westPoint = new PointState(curr.getCurRow(),curr.getCurCol()-1,new LinkedList<Character>());
+							toAdd.add(westPoint);
+							makeDirection(curr, westPoint, WEST);
+							break;
+						default:
+							break;
+					}
+				}
+				for(PointState addEle: toAdd) {
+					int add = 1;
+					for(PointState check: viewed) {
+						if(addEle.getCurRow() == check.getCurRow() && addEle.getCurCol() == check.getCurCol()) {
+							add = 0;
+						}
+					}
+					if(add == 1) {
+						addEle.setgCost(Math.sqrt(Math.pow(endRow-addEle.getCurRow(), 2) + Math.pow(endCol-addEle.getCurCol(), 2)));
+						addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
+						addEle.setfCost(addEle.getgCost());
+						queue.add(addEle);
+						System.out.println(addEle.getCurRow()+" " + addEle.getCurCol() + " added");
+					}
+				}
+			}
+		
+		}
+		System.out.println("Fail!!!!!!!!!!!!!");
+		LinkedList<Character> fail = new LinkedList<Character>();
+		fail.add('?');
+		return fail;
+	}
 }

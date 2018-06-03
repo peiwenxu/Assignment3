@@ -19,10 +19,12 @@ public class AgentState {
 	private LinkedList<Item> StoneList       = new LinkedList<Item>();
 	private LinkedList<Item> DoorList         = new LinkedList<Item>();
 	private LinkedList<Item> TreasureList   = new LinkedList<Item>();
+	private LinkedList<Item> WaterList = new LinkedList<Item>();
 	private LinkedList<Coordinate> ViewedPlace = new LinkedList<Coordinate>();
 	private LinkedList<Character> pendingMove = new LinkedList<Character>();
 	private LinkedList<Item> exploreView = new LinkedList<Item>();
-	private char viewedMap[][] = new char[80][80];
+	private LinkedList<Item> waterExplore = new LinkedList<Item>();
+	private char viewedMap[][] = new char[200][200];
 	private int startCol = viewedMap.length/2;
 	private int startRow = viewedMap.length/2;
 	private int curRow = startRow;
@@ -264,6 +266,26 @@ public class AgentState {
 
 	public void setInitialed(int initialed) {
 		this.initialed = initialed;
+	}
+
+
+	public LinkedList<Item> getWaterList() {
+		return WaterList;
+	}
+
+
+	public void setWaterList(LinkedList<Item> waterList) {
+		WaterList = waterList;
+	}
+
+
+	public LinkedList<Item> getWaterExplore() {
+		return waterExplore;
+	}
+
+
+	public void setWaterExplore(LinkedList<Item> waterExplore) {
+		this.waterExplore = waterExplore;
 	}
 	
 	
