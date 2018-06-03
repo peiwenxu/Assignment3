@@ -25,24 +25,28 @@ public class UpdateItemList {
 			for(Item e:agentState.getKeyList()) {
 				if(e.getRow() == curRow && e.getCol() == curCol) {
 					agentState.getKeyList().remove(e);
+					break;
 				}
 			}
 		} else if(Item == 'a') {
 			for(Item e:agentState.getAxeList()) {
 				if(e.getRow() == curRow && e.getCol() == curCol) {
 					agentState.getAxeList().remove(e);
+					break;
 				}
 			}
 		} else if(Item == '$') {
 			for(Item e:agentState.getTreasureList()) {
 				if(e.getRow() == curRow && e.getCol() == curCol) {
 					agentState.getTreasureList().remove(e);
+					break;
 				}
 			}
 		} else if(Item == 'o') {
 			for(Item e:agentState.getStoneList()) {
 				if(e.getRow() == curRow && e.getCol() == curCol) {
 					agentState.getStoneList().remove(e);
+					break;
 				}
 			}
 		}
@@ -54,24 +58,28 @@ public class UpdateItemList {
 				for(Item e:agentState.getTreeList()) {
 					if(e.getRow() == curRow-1 && e.getCol() == curCol) {
 						agentState.getTreeList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == SOUTH) {
 				for(Item e:agentState.getTreeList()) {
 					if(e.getRow() == curRow+1 && e.getCol() == curCol) {
 						agentState.getTreeList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == WEST) {
 				for(Item e:agentState.getTreeList()) {
 					if(e.getRow() == curRow && e.getCol() == curCol-1) {
 						agentState.getTreeList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == EAST) {
 				for(Item e:agentState.getTreeList()) {
 					if(e.getRow() == curRow && e.getCol() == curCol+1) {
 						agentState.getTreeList().remove(e);
+						break;
 					}
 				}
 			}
@@ -80,24 +88,28 @@ public class UpdateItemList {
 				for(Item e:agentState.getDoorList()) {
 					if(e.getRow() == curRow-1 && e.getCol() == curCol) {
 						agentState.getDoorList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == SOUTH) {
 				for(Item e:agentState.getDoorList()) {
 					if(e.getRow() == curRow+1 && e.getCol() == curCol) {
 						agentState.getDoorList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == WEST) {
 				for(Item e:agentState.getDoorList()) {
 					if(e.getRow() == curRow && e.getCol() == curCol-1) {
 						agentState.getDoorList().remove(e);
+						break;
 					}
 				}
 			} else if(direction == EAST) {
 				for(Item e:agentState.getDoorList()) {
 					if(e.getRow() == curRow && e.getCol() == curCol+1) {
 						agentState.getDoorList().remove(e);
+						break;
 					}
 				}
 			}
