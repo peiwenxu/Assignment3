@@ -23,7 +23,7 @@ public class ViewedMap {
 	public ViewedMap(AgentState agentState) {
 		this.agentState = agentState;
 	}
-
+	//initialize map for the game start
 	public void initialMap(char inView[][], char currentView[][]) {
 		int midRow = currentView.length/2;
 		int midCol = (currentView.length)/2;
@@ -53,7 +53,7 @@ public class ViewedMap {
 			startRow++;
 		}
 	}
-
+	//print the map we viewed
 	public void printViewedMap(char viewedMap[][]) {
 		for(int i = 0; i < viewedMap.length; i++) {
 			for(int i2 = 0; i2 < viewedMap.length; i2++) {
@@ -64,7 +64,7 @@ public class ViewedMap {
 			System.out.println();
 		}
 	}
-
+	//when we do actions update the map we viewed(moving part)
 	public void updateView(int dire, char action,char viewedMap[][], char inView[][],int currentRow, int currentCol) {
 		if(action == 'R' || action == 'r') {
 			if(viewedMap[currentRow][currentCol] == '^') {
@@ -158,7 +158,8 @@ public class ViewedMap {
 			return;
 		}
 	}
-
+	
+	//when we do actions update the map we viewed(chop_unlock part)
 	public boolean chop_unlock(int dire, AgentState agent, char action, char viewedMap[][], int currentRow, int currentCol) {
 		if(action == 'C' || action == 'c') {
 			if(agentState.isHave_axe() == true) {
@@ -219,7 +220,7 @@ public class ViewedMap {
 		}
 		return false;
 	}
-
+	//if some items in firstly appear in our view add them into our list
 	public void collectItem(char[][] inView, int row, int col,int viewRow, int viewCol) {
 		if(inView[row][col] == 'T') {
 			int exist = 0;
@@ -307,7 +308,7 @@ public class ViewedMap {
 			}
 		}
 	}
-	
+	//print Agent detail
 	public void printAgentDetail() {
 		System.out.println("CurrentRow: " +agentState.getCurRow());
         System.out.println("CurrentCol: " +agentState.getCurCol());
@@ -347,7 +348,9 @@ public class ViewedMap {
         System.out.println("On raft? " + agentState.isOn_raft());
         System.out.println("Off map? " + agentState.isOff_map());
 	}
-
+	
+	
+	//if we do actions update agent detail
 	public void updateAgentDetail(char action) {
 		UpdateItemList updateList = new UpdateItemList(this.agentState);
 		ViewedMap updateView = new ViewedMap(this.agentState);

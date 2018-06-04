@@ -19,7 +19,7 @@ public class UpdateItemList {
 	public void setagentState(AgentState agentState) {
 		this.agentState = agentState;
 	}
-	
+	//update agent list
 	public void Update(int curRow, int curCol, char Item) {
 		if(Item == 'k') {
 			for(Item e:agentState.getKeyList()) {
@@ -58,7 +58,7 @@ public class UpdateItemList {
 			}
 		}
 	}
-	
+	//update tree and door list
 	public void remove_chop_unlock(int curRow, int curCol, char action, int direction) {
 		if(action == 'C' || action == 'c') {
 			if(direction == NORTH) {

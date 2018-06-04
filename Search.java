@@ -11,7 +11,7 @@ public class Search {
 		this.agentState = agentState;
 	}
 	  
-	
+	//priority queue, return the nearest point to goal point using f cost
 	public PointState priorityQueue(LinkedList<PointState> queue) {
 		PointState forReturn = null;
 		double lowestF = 9999;
@@ -30,9 +30,10 @@ public class Search {
 		return forReturn;
 	}
 	
+	//for moving forward part, if agent just do moving, we give the point action into its action list
 	public void makeDirection(PointState prePoint, PointState curPoint, int position) {
 		int preDir = prePoint.getDirection();
-		//copy the action into new point
+		//copy the pre-point action into new point
 		for(Character ch: prePoint.getActions()) {
 			curPoint.getActions().add(ch);
 		}
@@ -131,10 +132,10 @@ public class Search {
 			}
 		}
 	}
-	
+	//if point need to chop or unlock we give the point action into its action list
 	public void unlock_chop(PointState prePoint, PointState curPoint, int position, char action) {
 		int preDir = prePoint.getDirection();
-		//copy the action into new point
+		//copy the pre point action into new point
 		for(Character ch: prePoint.getActions()) {
 			curPoint.getActions().add(ch);
 		}
@@ -250,7 +251,7 @@ public class Search {
 	}
 	
 	
-	
+	//AstarSearch for land part
 	public LinkedList<Character> AstarSearch(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
 		int stone = agentState.getNum_stones_held();
 		if(agentState.isHave_raft() == true && stone == 0) {
@@ -464,7 +465,7 @@ public class Search {
 		return fail;
 	}
 	
-	
+	//AstarSearch for water part
 	public LinkedList<Character> AstarSearchWater(int startRow, int startCol, int endRow, int endCol, char[][] viewedMap, int curDirection) {
 		int board = viewedMap.length;
 		PointState startPoint = new PointState(startRow, startCol, new LinkedList<Character>());

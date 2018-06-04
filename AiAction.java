@@ -26,7 +26,7 @@ public class AiAction {
 	}
 	
 	
-	
+	//if treasure is in our view return true, if not return false
 	public boolean treasureInView() {
 		for(int x = 0; x < agentState.getViewedMap().length; x++) {
 			for(int x2 = 0; x2 < agentState.getViewedMap()[0].length; x2++) {
@@ -38,7 +38,7 @@ public class AiAction {
 		return false;
 	}
 	
-	
+	//return the action
 	public Character doAction() {
 		if(!agentState.getPendingMove().isEmpty()) {
 			return agentState.getPendingMove().getFirst();
@@ -46,6 +46,7 @@ public class AiAction {
 		return 0;
 	}
 	
+	//use the actions to find the future direction, in order to predict whether we can get back
 	public int predictDirection(int currentDirection, LinkedList<Character> actions) {
 		int afterDir = currentDirection;
 		for(Character ch: actions) {
@@ -78,6 +79,7 @@ public class AiAction {
 		return afterDir;
 	}
 	
+	//check this point is in viewed list
 	public boolean needToGo(Item thisPoint) {
 		int exist = 0;
 		int board = agentState.getViewedMap().length;
@@ -115,6 +117,10 @@ public class AiAction {
 		return true;
 	}
 	
+	
+	//for explore map part. firstlly for every point, we explore the 4 cornor which are topright, topleft, bottomright,
+	// bottomleft to maximum the view as much as we can, However if these 4 point are blocked or they are '*' or 0 that 
+	// we never can go there, we split into nearing point, until we split to original point's nearing NORTH, EAST, WEST, SOUTH point
 	public void splitPoint(Item togo) {
 		if(togo.getName().equals("tr")) {
 			Item add1 = new Item(togo.getRow(),togo.getCol()-1,"tr2_1");
@@ -199,20 +205,19 @@ public class AiAction {
 		}
 	}
 	
-	
+	//AI main function to make move for next step
 	public Character makeMove() {
 		Search search = new Search(this.agentState);
 
-		
-		
-		
+
+		//if agent have pending move we just finish its pending move first
 		if(!agentState.getPendingMove().isEmpty()) {
 			char ch = doAction();
 			agentState.getPendingMove().removeFirst();
 			return ch;
 		}
 		
-		//make desision
+		//if agent dont have any pending move it have to make decision
 		while(agentState.getPendingMove().isEmpty()) {
 			//check if we have gold then we back
 			if(agentState.isHave_treasure() == true) {
@@ -494,7 +499,8 @@ public class AiAction {
 				}
 			}
 			
-			
+			//finally step if we still can not do anything, force agent to find somewhere it have not see
+			//then start explore the point
 			for(int k = 0; k < agentState.getViewedMap().length; k++) {
 				for(int k2= 0; k2 < agentState.getViewedMap().length; k2++) {
 					 if(agentState.getViewedMap()[k][k2] == ' ' || agentState.getViewedMap()[k][k2] == 'k'
@@ -527,7 +533,7 @@ public class AiAction {
 			
 			
 			
-			//else we back to start point
+			//we can not do anything, return back to start point
 			LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
         			agentState.getStartRow(), agentState.getStartCol(), agentState.getViewedMap(), agentState.getDirection());
 			for(Character action: actions) {
