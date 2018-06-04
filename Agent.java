@@ -59,32 +59,7 @@ public class Agent {
 		this.aiAction = aiAction;
 	}
 
-public char get_action( char[][] view ) {
-
-//    // REPLACE THIS CODE WITH AI TO CHOOSE ACTION
-//
-//    int ch=0;
-//
-//    System.out.print("Enter Action(s): ");
-//
-//    try {
-//      while ( ch != -1 ) {
-//        // read character from keyboard
-//        ch  = System.in.read();
-//
-//        switch( ch ) { // if character is a valid action, return it
-//         case 'F': case 'L': case 'R': case 'C': case 'U':
-//         case 'f': case 'l': case 'r': case 'c': case 'u':
-//           return((char) ch );
-//        }
-//      }
-//    }
-//    catch (IOException e) {
-//      System.out.println ("IO error:" + e );
-//    }
-//
-//    return 0;
-	  
+public char get_action( char[][] view ) {	  
 	 char ch = this.aiAction.makeMove();
 	 switch( ch ) { // if character is a valid action, return it
 	 	case 'F': case 'L': case 'R': case 'C': case 'U':
@@ -165,39 +140,13 @@ public char get_action( char[][] view ) {
 			updateView.initialMap(view, agentState.getViewedMap());
 			agentState.setInitialed(1);
         }
-        System.out.println("here");
-        updateView.printViewedMap(agentState.getViewedMap());
-        updateView.printAgentDetail();
-        // test to get the key
-//        Item key = agentState.getKeyList().getFirst();
-//        int keyRow = key.getRow();
-//        int keyCol = key.getCol();
-//        AiAction ai = new AiAction(agentState);
-//        agentState.setHave_treasure(false);
-//        char ch2 = ai.makeMove();
-//        System.out.println("The move: " + ch2);
-//        LinkedList<Character> actions = search.AstarSearch(40, 40, 
-//   			38, 40, agentState.getViewedMap(), agentState.getDirection());
-//        for(Character c: actions) {
-//        		System.out.println(c);
-//        }
-////        
+//        System.out.println("here");
+//        updateView.printViewedMap(agentState.getViewedMap());
+//        updateView.printAgentDetail(); 
         action = agent.get_action( view);
-	    	System.out.println(action);
+	    //	System.out.println(action);
 	    	out.write( action );
-//	    	try        
-//	    	{
-//	    		Thread.sleep(200);
-//	    	} 
-//	    	catch(InterruptedException ex) 
-//	    	{
-//	    		Thread.currentThread().interrupt();
-//	    	}
         updateView.updateAgentDetail(action);
-//        for(Item e: agentState.getExploreView()) {
-//        		System.out.println("Row: " + e.getRow() + "Col: " + e.getCol());
-//        }
-        //out.write( action );
       }
     }
     catch( IOException e ) {

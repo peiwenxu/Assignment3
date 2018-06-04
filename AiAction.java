@@ -89,31 +89,8 @@ public class AiAction {
 			}
 		}
 		if(exist == 1) {
-			System.out.println("This point we viewed");
 			return false;
 		}
-		
-		
-		
-		
-//		int viewedNum = 0;
-//		int startRow = thisPoint.getRow()-2;
-//		int startCol = thisPoint.getCol()-2;
-//		for(int i = startRow; i < startRow + 5; i++) {
-//			if(i < board) {
-//				for(int i2 = startCol; i2 < startCol + 5; i2++) {
-//					if(i2 < board) {
-//						if(agentState.getViewedMap()[i][i2] != 0) {
-//							viewedNum++;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		System.out.println("this point have see " + viewedNum);
-//		if(viewedNum == 25) {
-//			return false;
-//		}
 		return true;
 	}
 	
@@ -208,8 +185,6 @@ public class AiAction {
 	//AI main function to make move for next step
 	public Character makeMove() {
 		Search search = new Search(this.agentState);
-
-
 		//if agent have pending move we just finish its pending move first
 		if(!agentState.getPendingMove().isEmpty()) {
 			char ch = doAction();
@@ -236,13 +211,11 @@ public class AiAction {
 			
 			//if we see gold
 			if(!agentState.getTreasureList().isEmpty() && agentState.isOn_raft() == false) {
-				System.out.println("go to gold");
 				int goldRow = agentState.getTreasureList().getFirst().getRow();
 				int goldCol = agentState.getTreasureList().getFirst().getCol();
 				//check if we can get
 				LinkedList<Character> actions = search.AstarSearch(agentState.getCurRow(), agentState.getCurCol(), 
 	        			goldRow, goldCol, agentState.getViewedMap(), agentState.getDirection());
-				System.out.println(actions.getFirst());
 				if(actions.getFirst() != '?') {
 					for(Character action: actions) {
 						agentState.getPendingMove().add(action);
@@ -250,33 +223,13 @@ public class AiAction {
 					char ch = doAction();
 					agentState.getPendingMove().removeFirst();
 					return ch;
-					
-//					//check if we can back to startPoint
-//					int afterDir = predictDirection(agentState.getDirection(),actions);
-//					LinkedList<Character> actions2 = search.AstarSearch(goldRow, goldCol, 
-//		        			agentState.getStartRow(), agentState.getStartCol(), agentState.getViewedMap(),afterDir);
-//					if(actions2.getFirst() != '?') {
-//						//We can get gold and back
-//						for(Character action: actions) {
-//							agentState.getPendingMove().add(action);
-//						}
-//						for(Character action: actions2) {
-//							agentState.getPendingMove().add(action);
-//						}
-//						char ch = doAction();
-//						agentState.getPendingMove().removeFirst();
-//						return ch;
-//					}
 				}
 			}
 			//we dont have treasure and we need to explore map
 			if(!agentState.getExploreView().isEmpty() && agentState.isOn_raft() == false) {
-				System.out.println("we are here");
 				Item togo = agentState.getExploreView().removeLast();
-				System.out.println(togo.getName() + " " + togo.getRow() + " " + togo.getCol() + " ");
 				//check this point we need to go
 				if(needToGo(togo)) {
-					System.out.println("this point need to go");
 					//check we can get to this point
 					int cango = 1;
 					switch(agentState.getViewedMap()[togo.getRow()][togo.getCol()]) {
@@ -406,7 +359,6 @@ public class AiAction {
 			
 			//use raft to explore map
 			if(agentState.isHave_raft() == true) {
-				System.out.println("go to water!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				int waterRow = -1;
 				int waterCol = -1;
 				for(Item water: agentState.getWaterList()) {
@@ -480,7 +432,6 @@ public class AiAction {
 			
 			//cut all the tree if cant do anything
 			if(!agentState.getTreeList().isEmpty()) {
-				System.out.println("we here####");
 				int treeRow = 0;
 				int treeCol = 0;
 				for(Item tree: agentState.getTreeList()) {

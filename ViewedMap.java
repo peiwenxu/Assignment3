@@ -649,19 +649,6 @@ public class ViewedMap {
 	    		}
 	    	}
 	}
-	
-	
-	
-
-//	public char getAction(char action) {
-//		char
-//
-//		return action;
-//	}
-//
-//	public
-//
-
 
 
 }

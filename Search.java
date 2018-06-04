@@ -258,8 +258,6 @@ public class Search {
 			stone = 9999;
 		}
 		
-		System.out.println("utututu");
-		System.out.println("we want to go to " + endRow + " " + endCol);
 		int board = viewedMap.length;
 		PointState startPoint = new PointState(startRow, startCol, new LinkedList<Character>());
 		startPoint.setDirection(curDirection);
@@ -285,7 +283,6 @@ public class Search {
 			} else {
 				continue;
 			}
-			System.out.println("this point row: " + curr.getCurRow() + " this point Col: " + curr.getCurCol());
 			if(curr.getCurRow() == endRow && curr.getCurCol() == endCol) {
 				if(viewedMap[curr.getCurRow()][curr.getCurCol()] == '~') {
 					Item topRight = new Item(curr.getCurRow()-2,curr.getCurCol()+2,"tr");
@@ -305,14 +302,11 @@ public class Search {
 				if(curr.getCurRow()-1 >= 0) {
 					switch(viewedMap[curr.getCurRow()-1][curr.getCurCol()]) {
 						case ' ': case 'k': case 'a': case 'o': case '$':
-							System.out.println("add hee");
 							PointState northPoint = new PointState(curr.getCurRow()-1,curr.getCurCol(),new LinkedList<Character>());
 							toAdd.add(northPoint);
 							makeDirection(curr, northPoint, NORTH);
 							break;
 						case '-':
-							System.out.println("adding this point");
-							System.out.println(agentState.isHave_key());
 							if(agentState.isHave_key() == true) {
 								PointState northPoint2 = new PointState(curr.getCurRow()-1,curr.getCurCol(), new LinkedList<Character>());
 								toAdd.add(northPoint2);
@@ -320,7 +314,6 @@ public class Search {
 							}
 							break;
 						case 'T':
-							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
 								PointState northPoint2 = new PointState(curr.getCurRow()-1,curr.getCurCol(), new LinkedList<Character>());
 								toAdd.add(northPoint2);
@@ -355,7 +348,6 @@ public class Search {
 							}
 							break;
 						case 'T':
-							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
 								PointState eastPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()+1, new LinkedList<Character>());
 								toAdd.add(eastPoint2);
@@ -389,7 +381,6 @@ public class Search {
 							}
 							break;
 						case 'T':
-							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
 								PointState southPoint2 = new PointState(curr.getCurRow()+1,curr.getCurCol(), new LinkedList<Character>());
 								toAdd.add(southPoint2);
@@ -423,7 +414,6 @@ public class Search {
 							}
 							break;
 						case 'T':
-							System.out.println(agentState.isHave_axe());
 							if(agentState.isHave_axe() == true) {
 								PointState westPoint2 = new PointState(curr.getCurRow(),curr.getCurCol()-1, new LinkedList<Character>());
 								toAdd.add(westPoint2);
@@ -453,13 +443,11 @@ public class Search {
 						addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
 						addEle.setfCost(addEle.getgCost());
 						queue.add(addEle);
-						System.out.println(addEle.getCurRow()+" " + addEle.getCurCol() + " added");
 					}
 				}
 			}
 			
 		}
-		System.out.println("Fail!!!!!!!!!!!!!");
 		LinkedList<Character> fail = new LinkedList<Character>();
 		fail.add('?');
 		return fail;
@@ -557,13 +545,11 @@ public class Search {
 						addEle.sethCost(Math.abs(endRow-addEle.getCurRow()) + Math.abs(endCol-addEle.getCurCol()));
 						addEle.setfCost(addEle.getgCost());
 						queue.add(addEle);
-						System.out.println(addEle.getCurRow()+" " + addEle.getCurCol() + " added");
 					}
 				}
 			}
 		
 		}
-		System.out.println("Fail!!!!!!!!!!!!!");
 		LinkedList<Character> fail = new LinkedList<Character>();
 		fail.add('?');
 		return fail;
